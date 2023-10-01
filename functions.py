@@ -75,7 +75,7 @@ def show_table(table_data, headers, style, table_name, save=False):
 	table = tabulate(table_data, headers=headers, tablefmt=style)
 	print(table)
 	if save:
-		with open('./logs/table_'+table_name+'_.txt', 'w') as f:
+		with open('./output/table_'+table_name+'_.txt', 'w') as f:
 			f.write(table)
 
 		
