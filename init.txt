@@ -1,0 +1,14 @@
+# Data structures definition to store DNS query and response information
+max_bytes = 0
+dns_data = {}
+count = {}
+content_servers = set()
+
+# Set the threshold for received bytes (es 3000000 for 3 MB)
+TH_BYTES = 3000000
+
+# Set the maximum number of hops for traceroute implementation
+TRACEROUTE_MAXHOPS = 30
+
+# Set SAVE variable to True to write tables files in "./log" subdirectory
+SAVE = False
