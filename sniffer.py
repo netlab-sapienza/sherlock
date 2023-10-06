@@ -1,8 +1,9 @@
+from functions import *
+from tr import *
 import scapy.all as scapy
 import socket
 import sys
-from functions import *
-from tr import *
+import time
 
 
 
@@ -12,6 +13,8 @@ def process_packet(packet, cname):
 	# Most-likely, the latter will be the content-cache server.
 	# This function is executed for every received packet.
 	global max_bytes
+	global SNIFFER_TIMEOUT
+	global last_update
 	
 	if scapy.IP in packet:						# Check if the packet contains IP layer
 		
@@ -49,16 +52,19 @@ def process_packet(packet, cname):
 		else:
 			count[src_ip] += packet[scapy.IP].len
 			
-			for addr in list(count.keys()):
-				if check_server(addr, cname, dns_data.values()):
-					content_servers.add(addr)
-					if count[addr]>max_bytes:
-						max_bytes = count[addr]
-						perc = count[src_ip]/TH_BYTES*100
-						byte_monitor = f"Progress {round(perc)} %    (for surrogate server {src_ip})"
-						print(byte_monitor) if round(perc) % 10 == 0 else None
+			if check_server(src_ip, cname, dns_data.values()):
+				content_servers.add(src_ip)
+				if count[src_ip]>max_bytes:
+					last_update = time.time()
+					
+					max_bytes = count[src_ip]
+					perc = count[src_ip]/TH_BYTES*100
+					byte_monitor = f"Progress {round(perc)} %    (for surrogate server {src_ip})"
+					print(byte_monitor) if round(perc) % 10 == 0 else None
 			
-			if (count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values()):	# Stop when receive more than TH_bytes from a content server
+			if ((count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values())) or (time.time()-last_update>SNIFFER_TIMEOUT):
+				# Stop when receive more than TH_bytes from a content server or SNIFFER_TIMEOUT exceeded
+				print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
 				print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes')
 				with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 					s.connect(("localhost", 8080))
@@ -82,6 +88,13 @@ def import_variables():
 
 
 
+def activate_scraping():
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		s.connect(("localhost", 8080))
+		s.send(b"START")
+
+
+
 if __name__ == "__main__":
 	# Import global variables from "init.txt" files
 	import_variables()
@@ -95,6 +108,7 @@ if __name__ == "__main__":
 	# Sniff DNS packets on the network interface
 	network_interface = scapy.conf.iface
 	print(f"Sniffing on default interface: {network_interface}\nInterface IP address: {scapy.get_if_addr(network_interface)}\n")
+	activate_scraping()
 	scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
 	
 	# Process DNS data and show the table
@@ -109,7 +123,7 @@ if __name__ == "__main__":
 	ip_most_traffic = find_addr_max_data(count)
 	
 	# Perform traceroute analysis to all content servers
-	multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, SAVE)
+	multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE)
 	
 	
 	

@@ -20,7 +20,7 @@ def send_udp(dst, ttl, t = 0.5):
 
 
 
-def traceroute(destination, max_hops=30):
+def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 	# This function implements the traceroute command, by using ICMP or UDP packets.
 	# INPUT: destination IP address (type "str"), api to be used for geolocation, max_hops
 	# OUTPUT: hop_list
@@ -35,8 +35,8 @@ def traceroute(destination, max_hops=30):
 			reply = send_icmp(destination, ttl)
 			if reply is not None:
 				print(f"{ttl}:\tICMP,\treply from {str(reply.src)}")
-				where = find_location(str(reply.src))
-				AS, holder = find_as(str(reply.src))
+				where = find_location(str(reply.src), REQ_TIMEOUT)
+				AS, holder = find_as(str(reply.src), REQ_TIMEOUT)
 				hop_list.append([ttl, "ICMP", reply.src, where+", "+holder])
 				as_path.append(AS) if AS is not None else None
 				if reply.src == destination:
@@ -49,8 +49,8 @@ def traceroute(destination, max_hops=30):
 			reply = send_udp(destination, ttl)
 			if reply is not None:
 				print(f"{ttl}:\tUDP,\treply from {str(reply.src)}")
-				where = find_location(str(reply.src))
-				AS, holder = find_as(str(reply.src))
+				where = find_location(str(reply.src), REQ_TIMEOUT)
+				AS, holder = find_as(str(reply.src), REQ_TIMEOUT)
 				hop_list.append([ttl, "UDP", reply.src, where+", "+holder])
 				as_path.append(AS) if AS is not None else None
 				if reply.src == destination:
@@ -70,21 +70,21 @@ def traceroute(destination, max_hops=30):
 	
 	
 	
-def multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, SAVE):
+def multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE):
 	if len(content_servers)>0:
 		print(f"Content servers found: {content_servers}")
 		headers_tr = ["Hop", "Protocol", "Address", "Location"]
 		header_asp = ["Autonomous System"]
 		for ip_target in content_servers:
-			hop_list, as_path = traceroute(ip_target, TRACEROUTE_MAXHOPS)
+			hop_list, as_path = traceroute(ip_target, TRACEROUTE_MAXHOPS, REQ_TIMEOUT)
 			ASP = []
 			for el in as_path:
 				ASP.append([el])
 			headers = ["Hop", "Protocol", "Address", "Location"]
-			show_table(hop_list, headers, "pretty", "Traceroute towards "+ip_target, SAVE)
+			show_table(hop_list, headers, "pretty", "Traceroute towards "+ip_target, SAVE)	#TODO AFTER CHECK NEIGHBOURS
 			show_table(ASP, header_asp, "pretty", "AS path towards "+ip_target, SAVE)
 			
-			check_neighbour(as_path)
+			check_neighbour(as_path, REQ_TIMEOUT)
 	else:
 		print("No content server found")
 

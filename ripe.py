@@ -2,12 +2,12 @@ import requests
 import json
 from functions import is_public
 
-def find_location(ip_addr):
+def find_location(ip_addr, REQ_TIMEOUT):
 	if is_public(ip_addr):
 		url = f"https://ipmap-api.ripe.net/v1//locate/all/"
 		params = {"resources": ip_addr}
 		try:
-			response = requests.get(url, params=params, timeout=10)
+			response = requests.get(url, params=params, timeout=REQ_TIMEOUT)
 
 			if response.status_code == 200:
 				r = json.loads(response.content.decode("utf-8"))
@@ -30,11 +30,11 @@ def find_location(ip_addr):
 
 
 
-def find_neighbours(asn):
+def find_neighbours(asn, REQ_TIMEOUT):
 	url = "https://stat.ripe.net/data/asn-neighbours/data.json"
 	params = {"data_overload_limit": "ignore", "resource": str(asn)}
 	try:
-		response = requests.get(url, params=params, timeout=10)
+		response = requests.get(url, params=params, timeout=REQ_TIMEOUT)
 		
 		if response.status_code == 200:
 			r = json.loads(response.content.decode("utf-8"))
@@ -57,33 +57,37 @@ def find_neighbours(asn):
 
 
 
-def find_as(ip_addr):
+def find_as(ip_addr, REQ_TIMEOUT):
 	if is_public(ip_addr):
 		url = "https://stat.ripe.net/data/prefix-overview/data.json"
 		params = {"data_overload_limit": "ignore", "resource": ip_addr, "min_peers_seeing": "1"}
+		try:
+			response = requests.get(url, params=params, timeout=REQ_TIMEOUT)
 
-		response = requests.get(url, params=params)
-
-		if response.status_code == 200:
-			r = json.loads(response.content.decode("utf-8"))
-			if len(r["data"]["asns"]) > 1:
-				print("WARNING: found more than one asn, returning the first")
-			elif len(r["data"]["asns"]) < 1:
-				print("WARNING: found no asn, returning None")
+			if response.status_code == 200:
+				r = json.loads(response.content.decode("utf-8"))
+				if len(r["data"]["asns"]) > 1:
+					print("WARNING: found more than one asn, returning the first")
+				elif len(r["data"]["asns"]) < 1:
+					print("WARNING: found no asn, returning None")
+					return None, " --- "
+				if r["data"]["asns"][0]:
+					asn = r["data"]["asns"][0]["asn"]
+					holder = r["data"]["asns"][0]["holder"]
+					return asn, holder
+			else:
+				print("Failed GET request. Status code: ", response.status_code)
 				return None, " --- "
-			if r["data"]["asns"][0]:
-				asn = r["data"]["asns"][0]["asn"]
-				holder = r["data"]["asns"][0]["holder"]
-				return asn, holder
-		else:
-			print("Failed GET request. Status code: ", response.status_code)
+				
+		except requests.exceptions.Timeout:
+			print("Request timeout.")
 			return None, " --- "
 	else:
 		return None, " --- "
 
 
 
-def check_neighbour(path):
+def check_neighbour(path, REQ_TIMEOUT):
 	as_path = {}
 	
 	for idx, el in enumerate(path):
@@ -96,7 +100,7 @@ def check_neighbour(path):
 		next_asn = as_path[keys[i+1]]
 		print(f"\n*** AS {asn} -> {next_asn}:")
 		
-		neighbours = find_neighbours(asn)
+		neighbours = find_neighbours(asn, REQ_TIMEOUT)
 		
 		if neighbours is not None:
 			num_unknown_hops = keys[i+1]-keys[i]-1

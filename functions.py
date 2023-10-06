@@ -1,4 +1,5 @@
 from tabulate import tabulate
+from datetime import datetime as d
 import sys
 
 
@@ -75,7 +76,8 @@ def show_table(table_data, headers, style, table_name, save=False):
 	table = tabulate(table_data, headers=headers, tablefmt=style)
 	print(table)
 	if save:
-		with open('./output/table_'+table_name+'_.txt', 'w') as f:
+		moment = str(d.now().year)+str(d.now().month)+str(d.now().day)+"_"+str(d.now().hour)+str(d.now().minute)+str(d.now().second)
+		with open('./output/table_'+table_name+'_'+moment+'.txt', 'w') as f:
 			f.write(table)
 
 		

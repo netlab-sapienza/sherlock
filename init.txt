@@ -3,12 +3,21 @@ max_bytes = 0
 dns_data = {}
 count = {}
 content_servers = set()
+last_update = time.time()
 
-# Set the threshold for received bytes (es 3000000 for 3 MB)
+
+
+# Set timeout, at least 15, for sniffing packets (press 'Enter' for default value: 20) --> 
+SNIFFER_TIMEOUT = 20
+
+# Set the threshold for received bytes, at least 1000 (press 'Enter' for default value: 3000000 {for 3 MB}) --> 
 TH_BYTES = 3000000
 
-# Set the maximum number of hops for traceroute implementation
+# Set the maximum number of hops for traceroute implementation (press 'Enter' for default value: 30) --> 
 TRACEROUTE_MAXHOPS = 30
 
-# Set SAVE variable to True to write tables files in "./log" subdirectory
+# Set the timeout in seconds for API requests (press 'Enter' for default value: 10) --> 
+REQ_TIMEOUT = 10
+
+# Set SAVE variable to True to write tables files in "./output" subdirectory (press 'Enter' for default value: False) --> 
 SAVE = False

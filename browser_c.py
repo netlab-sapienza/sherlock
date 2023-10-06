@@ -10,13 +10,11 @@ import sys
 
 def scraping(video_url):
 	
-	time.sleep(3)
-	
 	# Automatically install Chrome WebDriver, if not already installed
 	service = Service()
 	
 	# Creating a virtual display
-	display = Display(visible=0, size=(1080, 720), backend="xvfb")
+	display = Display(visible=0, size=(1920, 1080), backend="xvfb")
 	display.start()
 	
 	# Add browser extensions
@@ -31,23 +29,19 @@ def scraping(video_url):
 	
 	# Browser's driver initialization
 	driver = webdriver.Chrome(service=service, options=chrome_options)
-	time.sleep(3)
+	driver.implicitly_wait(10)
+	#time.sleep(5)
 	
 	# Open the video URL in the browser
 	driver.get(video_url)
-	time.sleep(2)
+	
+	#time.sleep(10)
 	
 	return driver, display
 
 
 
 if __name__ == "__main__":
-	
-	# Initialize content demand
-	if len(sys.argv) > 1:
-		web_driver, display = scraping(sys.argv[1])
-	else:
-		print("FATAL INTERNAL ERROR: webdriver got no url.")
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.bind(("localhost", 8080))
@@ -55,7 +49,18 @@ if __name__ == "__main__":
 		conn, addr = s.accept()
 		with conn:
 			data = conn.recv(1024)
-			if data:
-				print("STOP received from main script:", data.decode())
+			if str(data.decode()) == "START":
+				if len(sys.argv) > 1:
+					web_driver, display = scraping(sys.argv[1])		# Initialize content demand
+				else:
+					print("FATAL INTERNAL ERROR: webdriver got no url.")
+					
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		s.bind(("localhost", 8080))
+		s.listen()
+		conn, addr = s.accept()
+		with conn:
+			data = conn.recv(1024)
+			if str(data.decode()) == "STOP":
 				web_driver.quit()
 				display.stop()
