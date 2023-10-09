@@ -31,11 +31,14 @@ def scraping(video_url):
 	driver.install_addon('./ext/cookie.xpi', temporary=True)
 	driver.install_addon('./ext/ad_block.xpi', temporary=True)
 	
-	#time.sleep(3)
-	
 	# Open the video URL in the browser
-	driver.get(video_url)
-	#time.sleep(2)
+	try:
+		driver.get(video_url)
+		
+	except Exception:
+		print("\n* WebDriver internal error, please restart *")
+		driver.quit()
+		return None, None
 	
 	return driver, display
 
@@ -52,6 +55,8 @@ if __name__ == "__main__":
 			if str(data.decode()) == "START":
 				if len(sys.argv) > 1:
 					web_driver, display = scraping(sys.argv[1])		# Initialize content demand
+					if web_driver is None and display is None:
+						sys.exit()
 				else:
 					print("FATAL INTERNAL ERROR: webdriver got no url.")
 					
@@ -61,6 +66,6 @@ if __name__ == "__main__":
 		conn, addr = s.accept()
 		with conn:
 			data = conn.recv(1024)
-			if str(data.decode()) == "STOP":
+			if str(data.decode()) == "STOP" and web_driver is not None and display is not None:
 				web_driver.quit()
 				display.stop()

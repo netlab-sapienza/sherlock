@@ -18,7 +18,7 @@ def process_packet(packet, cname):
 	
 	if scapy.IP in packet:						# Check if the packet contains IP layer
 		
-		if scapy.DNS in packet:				# Check if the packet contains DNS layer
+		if scapy.DNS in packet:					# Check if the packet contains DNS layer
 			dns_info = packet[scapy.DNS]			# and process it
 			if dns_info.qr == 0:  				#DNS query
 				dns_data[str(dns_info.id)] = {}
@@ -52,24 +52,24 @@ def process_packet(packet, cname):
 		else:
 			count[src_ip] += packet[scapy.IP].len
 			
-			if check_server(src_ip, cname, dns_data.values()):
-				content_servers.add(src_ip)
-				if count[src_ip]>max_bytes:
-					last_update = time.time()
-					
-					max_bytes = count[src_ip]
-					perc = count[src_ip]/TH_BYTES*100
-					byte_monitor = f"Progress {round(perc)} %    (for surrogate server {src_ip})"
-					print(byte_monitor) if round(perc) % 10 == 0 else None
-			
-			if ((count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values())) or (time.time()-last_update>SNIFFER_TIMEOUT):
-				# Stop when receive more than TH_bytes from a content server or SNIFFER_TIMEOUT exceeded
-				print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
-				print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes')
-				with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-					s.connect(("localhost", 8080))
-					s.send(b"Sending STOP condition to webdriver process")
-				return True
+		if check_server(src_ip, cname, dns_data.values()):
+			content_servers.add(src_ip)
+			if count[src_ip]>max_bytes:
+				last_update = time.time()
+				
+				max_bytes = count[src_ip]
+				perc = count[src_ip]/TH_BYTES*100
+				byte_monitor = f"Progress {round(perc)} %    (for surrogate server {src_ip})"
+				print(byte_monitor) if round(perc) % 10 == 0 else None
+		
+		if ((count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values())) or (time.time()-last_update>SNIFFER_TIMEOUT):
+			# Stop when receive more than TH_bytes from a content server or SNIFFER_TIMEOUT exceeded
+			print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
+			print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes')
+			with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+				s.connect(("localhost", 8080))
+				s.send(b"STOP")			# Sending STOP condition to webdriver process
+			return True
 	return False
 
 
@@ -96,13 +96,13 @@ def activate_scraping():
 
 
 if __name__ == "__main__":
-	# Import global variables from "init.txt" files
-	import_variables()
+	
+	import_variables()						# Import global variables from "init.txt" files
 	
 	if len(sys.argv) > 1:
 		cname = sys.argv[1]
 	else:
-		print("CODE INTERNAL ERROR: CNAME NOT GIVEN")
+		print("INTERNAL ERROR: CNAME NOT GIVEN")
 		sys.exit()
 	
 	# Sniff DNS packets on the network interface

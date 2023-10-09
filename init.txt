@@ -8,7 +8,7 @@ last_update = time.time()
 
 
 # Set timeout, at least 15, for sniffing packets (press 'Enter' for default value: 20) --> 
-SNIFFER_TIMEOUT = 20
+SNIFFER_TIMEOUT = 60
 
 # Set the threshold for received bytes, at least 1000 (press 'Enter' for default value: 3000000 {for 3 MB}) --> 
 TH_BYTES = 3000000
