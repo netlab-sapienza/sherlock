@@ -52,7 +52,7 @@ It is also possible adding an url pointing to a content, by runnig:
 python3 start.py https://www.---.com/---
 ```
 
-The parameters that can be tuned are located in the init.txt file;
+The parameters that can be tuned are located in the `init.txt` file;
 * `SNIFFER_TIMEOUT`, set in seconds as the time to wait before interrupting the execution if packets are no longer received
 * `TH_BYTES`, set as the threshold of received bytes from a cache server to stop the execution 
 * `TRACEROUTE_MAXHOPS`, set as the maximum number of hops for tracerouting
