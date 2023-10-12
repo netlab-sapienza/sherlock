@@ -48,12 +48,13 @@ def process_packet(packet, cname):
 		
 		src_ip = packet[scapy.IP].src				# Keep track of source IP addresses
 		if src_ip not in count.keys():
-			count[src_ip] = packet[scapy.IP].len		# Length-weighted
+			count[src_ip] = packet[scapy.IP].len
 		else:
 			count[src_ip] += packet[scapy.IP].len
-			
+		
 		if check_server(src_ip, cname, dns_data.values()):
-			content_servers.add(src_ip)
+			content_servers.add(src_ip)				
+				
 			if count[src_ip]>max_bytes:
 				last_update = time.time()
 				

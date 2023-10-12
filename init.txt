@@ -1,3 +1,4 @@
+# Do not modify
 # Data structures definition to store DNS query and response information
 max_bytes = 0
 dns_data = {}
@@ -7,6 +8,9 @@ last_update = time.time()
 
 
 
+
+
+# You can modify
 # Set timeout, at least 15, for sniffing packets (press 'Enter' for default value: 20) --> 
 SNIFFER_TIMEOUT = 60
 

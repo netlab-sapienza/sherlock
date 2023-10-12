@@ -11,15 +11,14 @@ def process1(cname):
 	
 def process2(url):
 	operating_system = str(platform.system()).lower()
-	system_version  = str(platform.version()).lower()
 	default_browser = str(subprocess.getoutput("update-alternatives --display x-www-browser | grep 'link currently points to' | awk '{print $NF}'")).lower()
 	
 	if "linux" in operating_system:
-		if "ubuntu" in system_version and "chrome" in default_browser:
+		if "chrome" in default_browser:
 			os.system(f"python3 browser_c.py {url}")
-		elif "ubuntu" in system_version and "firefox" in default_browser:
+		elif "firefox" in default_browser:
 			os.system(f"python3 browser_f.py {url}")
-		elif "debian" in system_version and "chromium" in default_browser:
+		elif "chromium" in default_browser:
 			os.system(f"python3 browser_cm.py {url}")
 		else:
 			print("ERROR: Please set Chrome (Chromium on Debian) or Firefox as default browser")
