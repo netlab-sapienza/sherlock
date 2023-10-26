@@ -100,10 +100,10 @@ def multi_rtt(content_servers, REQ_TIMEOUT, SAVE):
 	for target_ip in list(content_servers):
 		packet = scapy.IP(dst=target_ip) / scapy.ICMP(type=8, code=0)
 		ans, unans = scapy.sr(packet*5, verbose=False, timeout=REQ_TIMEOUT)
-		sent = ans[0][0].sent_time
-		received = ans[0][1].time
-		
-		rtt.append([target_ip, round((received-sent)*1e3, 3)])
+		if ans:
+			sent = ans[0][0].sent_time
+			received = ans[0][1].time
+			rtt.append([target_ip, round((received-sent)*1e3, 3)])
 		
 	show_table(rtt, ["IP Address", "Mean RTT"], "pretty", "Round Trip Times", SAVE)
 	
