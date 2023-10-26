@@ -37,7 +37,7 @@ def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 				print(f"{ttl}:\tICMP,\treply from {str(reply.src)}")
 				where = find_location(str(reply.src), REQ_TIMEOUT)
 				AS, holder = find_as(str(reply.src), REQ_TIMEOUT)
-				hop_list.append([ttl, "ICMP", reply.src, where+", "+holder])
+				hop_list.append([ttl, "ICMP", reply.src, where+", "+holder, AS])
 				as_path.append(AS) if AS is not None else None
 				if reply.src == destination:
 					break
@@ -51,7 +51,7 @@ def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 				print(f"{ttl}:\tUDP,\treply from {str(reply.src)}")
 				where = find_location(str(reply.src), REQ_TIMEOUT)
 				AS, holder = find_as(str(reply.src), REQ_TIMEOUT)
-				hop_list.append([ttl, "UDP", reply.src, where+", "+holder])
+				hop_list.append([ttl, "UDP", reply.src, where+", "+holder, AS])
 				as_path.append(AS) if AS is not None else None
 				if reply.src == destination:
 					break
@@ -62,7 +62,7 @@ def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 		
 		else:
 			print(f"{ttl}:\t*,\tno reply")
-			hop_list.append([ttl, " . ", "*.*.*.*", " "])
+			hop_list.append([ttl, " . ", "*.*.*.*", " ", " "])
 			as_path.append("*")
 			nFail = 0
 			ttl += 1
@@ -73,26 +73,45 @@ def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 def multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE):
 	if len(content_servers)>0:
 		print(f"Content servers found: {content_servers}")
-		headers_tr = ["Hop", "Protocol", "Address", "Location"]
-		header_asp = ["Autonomous System"]
+		headers_tr = ["Hop", "Protocol", "Address", "Location", "ASN"]
+		header_asp = ["Autonomous Systems Path"]
 		for ip_target in content_servers:
 			hop_list, as_path = traceroute(ip_target, TRACEROUTE_MAXHOPS, REQ_TIMEOUT)
-			ASP = []
-			for el in as_path:
-				ASP.append([el])
-			headers = ["Hop", "Protocol", "Address", "Location"]
-			show_table(hop_list, headers, "pretty", "Traceroute towards "+ip_target, SAVE)	#TODO AFTER CHECK NEIGHBOURS
-			show_table(ASP, header_asp, "pretty", "AS path towards "+ip_target, SAVE)
 			
-			check_neighbour(as_path, REQ_TIMEOUT)
+			as_list = check_neighbour(as_path, REQ_TIMEOUT)
+			ASP = []
+			for el in as_list:
+				ASP.append([el])
+				
+			show_table(hop_list, headers_tr, "pretty", "Traceroute towards "+ip_target, SAVE)
+			print("\nLegend for AS Path:")
+			print("\t n   - Autonomous System Number")
+			print("\t !   - Error. The number of repetitions corresponds to the number of lost hops")
+			print("\t ?   - Autonomous Systems not connected")
+			print("\t *   - Unknown hops")
+			show_table(ASP, header_asp, "pretty", "AS path towards "+ip_target, SAVE)
 	else:
 		print("No content server found")
 
 
+
+def multi_rtt(content_servers, REQ_TIMEOUT, SAVE):
+	rtt = []
+	for target_ip in list(content_servers):
+		packet = scapy.IP(dst=target_ip) / scapy.ICMP(type=8, code=0)
+		ans, unans = scapy.sr(packet*5, verbose=False, timeout=REQ_TIMEOUT)
+		sent = ans[0][0].sent_time
+		received = ans[0][1].time
+		
+		rtt.append([target_ip, round((received-sent)*1e3, 3)])
+		
+	show_table(rtt, ["IP Address", "Mean RTT"], "pretty", "Round Trip Times", SAVE)
+	
+	
+	
 if __name__ == "__main__":	#For testing...
 	# Destination IP address
-	destination_ip = "151.99.51.175"	#Youtube: "173.194.18.136"
+	destination_ip = ["74.125.99.168"]	#Youtube: "173.194.18.136"
 
 	# Execute traceroute
-	hop_list, as_path = traceroute(destination_ip)
-	print(as_path)
+	multi_traceroute(destination_ip, 30, 5, False)

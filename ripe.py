@@ -89,29 +89,41 @@ def find_as(ip_addr, REQ_TIMEOUT):
 
 def check_neighbour(path, REQ_TIMEOUT):
 	as_path = {}
+	as_list = []
 	
 	for idx, el in enumerate(path):
 		if isinstance(el, int):
 			as_path[idx] = el
-	
+		
 	keys = list(as_path.keys())
+	[as_list.append('*') for x in range(keys[0])]
+	
 	for i in range(len(keys) - 1):
 		asn = as_path[keys[i]]
 		next_asn = as_path[keys[i+1]]
 		print(f"\n*** AS {asn} -> {next_asn}:")
 		
 		neighbours = find_neighbours(asn, REQ_TIMEOUT)
+		num_unknown_hops = keys[i+1]-keys[i]-1
+		
+		as_list.append(asn)
 		
 		if neighbours is not None:
-			num_unknown_hops = keys[i+1]-keys[i]-1
+			[as_list.append('*') for x in range(num_unknown_hops)]
 			if next_asn == asn:
 				print(f"\tSAME: {num_unknown_hops} unknown hops between them")
 			elif next_asn in neighbours:
 				print(f"\tCONNECTED: {num_unknown_hops} unknown hops between them")
 			else:
 				print(f"\tNOT CONNECTED: {num_unknown_hops} unknown hops between them")
+				as_list.append("?")
 		else:
 			print("\tERROR: could not complete the request.")
+			print(f"\t       {num_unknown_hops} unknown hops between them")
+			[as_list.append('!') for x in range(max(1, num_unknown_hops))]
+			
+	as_list.append(as_path[keys[i+1]])		
+	return(as_list)
 
 
 
@@ -119,7 +131,9 @@ if __name__ == "__main__":
 	#ip = "151.99.51.173"
 	#asn, holder = find_as(ip)
 	#loc = find_location(ip)
-	as_path = [3269, 6762, '*', '*', 15169, '*', 15169, 12345]
-	check_neighbour(as_path)
+	as_path = ['*', '*', '*', 3269, 6762, '*', '*', 15169, '*', 15169, 12345]
+	as_list = check_neighbour(as_path, 5)
+	print("INPUT : "+str(as_path))
+	print("OUTPUT: "+str(as_list))
 	#neighbours = find_neighbours(asn)
 	#print(neighbours)

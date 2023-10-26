@@ -11,9 +11,10 @@ Please note that several libraries are required to make the code working:
 * selenium
 * tabulate
 
-To install them, use the command:
+To install them, use the commands (user & root):
 ```
 pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 
 It is also required to have an internet browser installed on the system (either Chrome or Firefox).

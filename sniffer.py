@@ -66,10 +66,8 @@ def process_packet(packet, cname):
 		if ((count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values())) or (time.time()-last_update>SNIFFER_TIMEOUT):
 			# Stop when receive more than TH_bytes from a content server or SNIFFER_TIMEOUT exceeded
 			print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
-			print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes')
-			with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-				s.connect(("localhost", 8080))
-				s.send(b"STOP")			# Sending STOP condition to webdriver process
+			print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes') if count[src_ip] > TH_BYTES else None
+			stop_scraping()
 			return True
 	return False
 
@@ -93,6 +91,13 @@ def activate_scraping():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.connect(("localhost", 8080))
 		s.send(b"START")
+		
+		
+		
+def stop_scraping():
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+			s.connect(("localhost", 8080))
+			s.send(b"STOP")			# Sending STOP condition to webdriver process
 
 
 
@@ -112,19 +117,26 @@ if __name__ == "__main__":
 	activate_scraping()
 	scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
 	
-	# Process DNS data and show the table
-	dns_args = dns_data_table_format(dns_data)
-	show_table(dns_args[0], dns_args[1], dns_args[2], dns_args[3], SAVE)
-	
-	# Process traffic data and show the table
-	count_args = count_data_table_format(count)
-	show_table(count_args[0], count_args[1], count_args[2], count_args[3], SAVE)
-	
-	# Obtain the address that sent the most data
-	ip_most_traffic = find_addr_max_data(count)
-	
-	# Perform traceroute analysis to all content servers
-	multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE)
+	try:
+		# Process DNS data and show the table
+		dns_args = dns_data_table_format(dns_data)
+		show_table(dns_args[0], dns_args[1], dns_args[2], dns_args[3], SAVE)
+		
+		# Process traffic data and show the table
+		count_args = count_data_table_format(count)
+		show_table(count_args[0], count_args[1], count_args[2], count_args[3], SAVE)
+		
+		# Obtain the address that sent the most data
+		ip_most_traffic = find_addr_max_data(count)
+		
+		# Perform traceroute analysis to all content servers
+		multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE)
+			
+		# Perform RTT analysis to all content servers
+		multi_rtt(content_servers, REQ_TIMEOUT, SAVE)	
+	except:
+		print("Code execution error, please retry")
+		stop_scraping()
 	
 	
 	
