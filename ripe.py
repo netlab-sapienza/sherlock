@@ -96,33 +96,34 @@ def check_neighbour(path, REQ_TIMEOUT):
 			as_path[idx] = el
 		
 	keys = list(as_path.keys())
-	[as_list.append('*') for x in range(keys[0])]
-	
-	for i in range(len(keys) - 1):
-		asn = as_path[keys[i]]
-		next_asn = as_path[keys[i+1]]
-		print(f"\n*** AS {asn} -> {next_asn}:")
+	if keys:
+		[as_list.append('*') for x in range(keys[0])]
 		
-		neighbours = find_neighbours(asn, REQ_TIMEOUT)
-		num_unknown_hops = keys[i+1]-keys[i]-1
-		
-		as_list.append(asn)
-		
-		if neighbours is not None:
-			[as_list.append('*') for x in range(num_unknown_hops)]
-			if next_asn == asn:
-				print(f"\tSAME: {num_unknown_hops} unknown hops between them")
-			elif next_asn in neighbours:
-				print(f"\tCONNECTED: {num_unknown_hops} unknown hops between them")
-			else:
-				print(f"\tNOT CONNECTED: {num_unknown_hops} unknown hops between them")
-				as_list.append("?")
-		else:
-			print("\tERROR: could not complete the request.")
-			print(f"\t       {num_unknown_hops} unknown hops between them")
-			[as_list.append('!') for x in range(max(1, num_unknown_hops))]
+		for i in range(len(keys) - 1):
+			asn = as_path[keys[i]]
+			next_asn = as_path[keys[i+1]]
+			print(f"\n*** AS {asn} -> {next_asn}:")
 			
-	as_list.append(as_path[keys[i+1]])		
+			neighbours = find_neighbours(asn, REQ_TIMEOUT)
+			num_unknown_hops = keys[i+1]-keys[i]-1
+			
+			as_list.append(asn)
+			
+			if neighbours is not None:
+				[as_list.append('*') for x in range(num_unknown_hops)]
+				if next_asn == asn:
+					print(f"\tSAME: {num_unknown_hops} unknown hops between them")
+				elif next_asn in neighbours:
+					print(f"\tCONNECTED: {num_unknown_hops} unknown hops between them")
+				else:
+					print(f"\tNOT CONNECTED: {num_unknown_hops} unknown hops between them")
+					as_list.append("?")
+			else:
+				print("\tERROR: could not complete the request.")
+				print(f"\t       {num_unknown_hops} unknown hops between them")
+				[as_list.append('!') for x in range(max(1, num_unknown_hops))]
+				
+		as_list.append(as_path[keys[i+1]])		
 	return(as_list)
 
 
