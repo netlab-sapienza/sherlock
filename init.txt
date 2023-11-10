@@ -17,7 +17,7 @@ SNIFFER_TIMEOUT = 20
 
 
 
-# Set the number of ICMP requests for packet loss estimation towards content servers
+# Set the number of requests for packet loss estimation towards content servers
 # (default value: 50)
 
 N_REQUESTS = 30
