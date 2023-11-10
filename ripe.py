@@ -189,7 +189,7 @@ def intersect_neighbours(as1, as2, caida_db, REQ_TIMEOUT):
 			peer_inter = list(peering_neighbours_1.intersection(peering_neighbours_2))
 			if len(peer_inter)>0:
 				output["Peering"] = peer_inter
-			else:
+			elif len(transit_neighbours_1) != 1:
 				output = "?"
 			
 		if len(transit_neighbours_1) == 1:
