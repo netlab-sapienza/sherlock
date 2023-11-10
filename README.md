@@ -24,7 +24,7 @@ sudo snap install firefox
 ### How to install VirtualDisplay
 It is also required also X-server video frame buffer:
 ```
-sudo apt install xvfb
+sudo apt-get install xvfb
 ```
 
 ### How to install all Libraries
