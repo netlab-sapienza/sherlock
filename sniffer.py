@@ -1,9 +1,15 @@
+from datetime import datetime as d
 from functions import *
 from tr import *
 import scapy.all as scapy
-import socket
 import sys
 import time
+import zmq
+import os
+
+context = zmq.Context()
+requester = context.socket(zmq.REQ)
+requester.connect("tcp://localhost:8000")
 
 
 
@@ -18,7 +24,7 @@ def process_packet(packet, cname):
 	
 	if scapy.IP in packet:						# Check if the packet contains IP layer
 		
-		if scapy.DNS in packet:					# Check if the packet contains DNS layer
+		if scapy.DNS in packet:				# Check if the packet contains DNS layer
 			dns_info = packet[scapy.DNS]			# and process it
 			if dns_info.qr == 0:  				#DNS query
 				dns_data[str(dns_info.id)] = {}
@@ -60,14 +66,13 @@ def process_packet(packet, cname):
 				
 				max_bytes = count[src_ip]
 				perc = count[src_ip]/TH_BYTES*100
-				byte_monitor = f"Progress {round(perc)} %    (for surrogate server {src_ip})"
+				byte_monitor = f"\tProgress {round(perc)} %    (for cache server {src_ip})"
 				print(byte_monitor) if round(perc) % 10 == 0 else None
 		
 		if ((count[src_ip] > TH_BYTES) and check_server(src_ip, cname, dns_data.values())) or (time.time()-last_update>SNIFFER_TIMEOUT):
 			# Stop when receive more than TH_bytes from a content server or SNIFFER_TIMEOUT exceeded
-			print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
-			print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes') if count[src_ip] > TH_BYTES else None
-			stop_scraping()
+			#print("Timeout interruption") if time.time()-last_update>SNIFFER_TIMEOUT else None
+			#print(f'IP {src_ip} has sent {count[src_ip]} > {TH_BYTES} bytes') if count[src_ip] > TH_BYTES else None
 			return True
 	return False
 
@@ -87,56 +92,112 @@ def import_variables():
 
 
 
-def activate_scraping():
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-		s.connect(("localhost", 8080))
-		s.send(b"START")
-		
-		
-		
-def stop_scraping():
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-			s.connect(("localhost", 8080))
-			s.send(b"STOP")			# Sending STOP condition to webdriver process
-
-
-
 if __name__ == "__main__":
+
+	cname = sys.argv[1]
+	provider = sys.argv[2]
+	url = import_url(provider)
+	json_output = {}
+	for i in range(len(url)):
+		json_output[f"Content {i}"] = {}
+		json_output[f"Content {i}"]["URL"] = url[i]
+		json_output[f"Content {i}"]["Content Provider"] = provider
+		json_output[f"Content {i}"]["CNAME"] = cname.split("+")
 	
-	import_variables()						# Import global variables from "init.txt" files
+	# Import global variables from "init.txt" files
+	import_variables()
 	
-	if len(sys.argv) > 1:
-		cname = sys.argv[1]
-	else:
-		print("INTERNAL ERROR: CNAME NOT GIVEN")
-		sys.exit()
-	
-	# Sniff DNS packets on the network interface
 	network_interface = scapy.conf.iface
-	print(f"Sniffing on default interface: {network_interface}\nInterface IP address: {scapy.get_if_addr(network_interface)}\n")
-	activate_scraping()
+	print(f"\tSniffing on default interface: {network_interface}\n\tInterface IP address: {scapy.get_if_addr(network_interface)}\n")
+	
+	# Start the execution & save timestamp
+	requester.send_string("START")
+	i = int(0)
+	for key, value in json_output.items():
+		if isinstance(value, dict) and value["URL"] == url[i]:
+			json_output[key]["Timestamp"] = get_time()
+			break
+	
 	scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
 	
-	try:
+	while True:
+		msg = requester.recv_string()
+		print(f"\tSNIFFER has received: {msg}")
+		
+		if msg=="DRIVER_READY":
+			# The Web driver loaded the page and activated the strem of the content.
+			# It is now ready to be stopped and prepared for the next content request
+			print(f"\tFound {len(content_servers)} cache servers, starting measurements:")
+			for cs in range(len(content_servers)):
+				print(f"\n\tServer {cs+1} out of {len(content_servers)}")
+				icmp_results, icmp_ploss, tcp_results, tcp_ploss = rtt_measurement(list(content_servers)[cs], N_REQUESTS, REQ_TIMEOUT, SAVE)
+				results_traceroute, results_aspath = traceroute(list(content_servers)[cs], TRACEROUTE_MAXHOPS, REQ_TIMEOUT)
+				for x in range(max(1, i)):
+					for value in json_output.values():
+						if isinstance(value, dict):
+							server_location = results_traceroute[max(list(results_traceroute.keys()))]['Location']
+							server_asn = results_traceroute[max(list(results_traceroute.keys()))]['AS']
+							json_output["Content "+str(i)]["Server "+str(cs)] = {}
+							json_output["Content "+str(i)]["Server "+str(cs)]["RTT Measurements"] = {}
+							json_output["Content "+str(i)]["Server "+str(cs)]["Packet Loss"] = {}
+							json_output["Content "+str(i)]["Server "+str(cs)]["Traceroute"] = {}
+							json_output["Content "+str(i)]["Server "+str(cs)]["IP Address"] = list(content_servers)[cs]
+							json_output["Content "+str(i)]["Server "+str(cs)]["ASN"] = server_asn
+							json_output["Content "+str(i)]["Server "+str(cs)]["Location"] = server_location
+							json_output["Content "+str(i)]["Server "+str(cs)]["RTT Measurements"]["ICMP"] = icmp_results
+							json_output["Content "+str(i)]["Server "+str(cs)]["RTT Measurements"]["TCP"] = tcp_results
+							json_output["Content "+str(i)]["Server "+str(cs)]["Packet Loss"]["ICMP"] = icmp_ploss/N_REQUESTS
+							json_output["Content "+str(i)]["Server "+str(cs)]["Packet Loss"]["TCP"] = tcp_ploss/N_REQUESTS
+							json_output["Content "+str(i)]["Server "+str(cs)]["Traceroute"]["Hop-By-Hop"] = results_traceroute
+							json_output["Content "+str(i)]["Server "+str(cs)]["Traceroute"]["As-Path"] = results_aspath
+							break
+			max_bytes = 0
+			
+			if SHOW_count_and_dns:
+				# Process traffic data and show the table
+				count_args = count_data_table_format(count)
+				print(show_table(count_args[0], count_args[1], count_args[2], count_args[3], SAVE))
+			
+			count = {}
+			last_update = time.time()
+			content_servers = set()
+			i += 1
+			requester.send_string("STOP")
+		
+		if msg=="CONTINUE":
+			# Instructing the Web driver to start the request for the next content on the list
+			requester.send_string("START")
+			for key, value in json_output.items():
+				if isinstance(value, dict) and value["URL"] == url[i]:
+					json_output[key]["Timestamp"] = get_time()
+					break
+			scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
+		
+		if msg=="DONE":
+			# The Web driver has now completed the list of content URLs.
+			break
+	
+	now = get_time()
+	filename = 'measure_'+provider+'_'+now+'.json'
+	with open('./output/'+filename, 'w') as f:
+		f.write(json.dumps(json_output, sort_keys=True, indent=4))
+		f.close()
+	print(f"\tResults stored in the output folder, file: {filename}")
+	
+	# This script is executed with sudo, so the file will be read-only.
+	# Changing from root-group to user-group
+	uid = os.getuid()
+	gid = os.getgid()
+	new_gid = 1000  				# UserGroup
+	os.chown('./output/'+filename, uid, new_gid)
+	os.chmod('./output/'+filename, 0o664)  	# Permissions: -rw-rw-r--
+	
+	if SHOW_count_and_dns:
 		# Process DNS data and show the table
 		dns_args = dns_data_table_format(dns_data)
-		show_table(dns_args[0], dns_args[1], dns_args[2], dns_args[3], SAVE)
-		
-		# Process traffic data and show the table
-		count_args = count_data_table_format(count)
-		show_table(count_args[0], count_args[1], count_args[2], count_args[3], SAVE)
-		
-		# Obtain the address that sent the most data
-		ip_most_traffic = find_addr_max_data(count)
-		
-		# Perform traceroute analysis to all content servers
-		multi_traceroute(content_servers, TRACEROUTE_MAXHOPS, REQ_TIMEOUT, SAVE)
-			
-		# Perform RTT analysis to all content servers
-		multi_rtt(content_servers, REQ_TIMEOUT, SAVE)	
-	except:
-		print("Code execution error, please retry")
-		stop_scraping()
+		print(show_table(dns_args[0], dns_args[1], dns_args[2], dns_args[3], SAVE))
 	
-	
+	'''
+	print(json.dumps(json_output, sort_keys=False, indent=4))
+	'''
 	

@@ -1,27 +1,60 @@
 # Do not modify
 # Data structures definition to store DNS query and response information
 max_bytes = 0
-dns_data = {}
 count = {}
-content_servers = set()
 last_update = time.time()
+dns_data = {}
+content_servers = set()
+
+#-----------------------------------------------------------------------------------------------------------------------------------------#
+
+# You can modify here
+
+# Set timeout, recommending at least 15, for sniffing packets
+# (default value: 20)
+
+SNIFFER_TIMEOUT = 20
 
 
 
+# Set the number of ICMP requests for packet loss estimation towards content servers
+# (default value: 50)
+
+N_REQUESTS = 30
 
 
-# You can modify
-# Set timeout, at least 15, for sniffing packets (press 'Enter' for default value: 20) --> 
-SNIFFER_TIMEOUT = 60
 
-# Set the threshold for received bytes, at least 1000 (press 'Enter' for default value: 3000000 {for 3 MB}) --> 
-TH_BYTES = 3000000
+# Set the threshold for received bytes, at least 1000
+# (default value: 250000 {for 250 kB})
 
-# Set the maximum number of hops for traceroute implementation (press 'Enter' for default value: 30) --> 
+TH_BYTES = 250000
+
+
+
+# Set the maximum number of hops for traceroute implementation
+# (default value: 30)
+
 TRACEROUTE_MAXHOPS = 30
 
-# Set the timeout in seconds for API requests (press 'Enter' for default value: 10) --> 
-REQ_TIMEOUT = 10
 
-# Set SAVE variable to True to write tables files in "./output" subdirectory (press 'Enter' for default value: False) --> 
+
+# Set the timeout in seconds for API requests
+# (default value: 5)
+
+REQ_TIMEOUT = 5
+
+
+
+# Set the following variable to True to terminal-print DNS and received traffic tables.
+# It was useful in testing to analyze what address sent the most data and check its DNS record
+# (default value: False)
+
+SHOW_count_and_dns = False
+
+
+
+# Set SAVE variable to True to write tables of DNS and CountBytes in "./output" subdirectory
+# (default value: False)
+
 SAVE = False
+

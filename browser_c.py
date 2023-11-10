@@ -2,11 +2,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from pyvirtualdisplay import Display
-import socket
-import time
+from functions import import_url
 import sys
+import zmq
 
-
+context = zmq.Context()
+responder = context.socket(zmq.REP)
+responder.bind("tcp://*:8000")
 
 def scraping(video_url):
 	
@@ -20,7 +22,7 @@ def scraping(video_url):
 	# Add browser extensions
 	chrome_options = Options()
 	chrome_options.add_argument("--start-maximized")  	# open Browser in maximized mode
-	chrome_options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
+	chrome_options.add_argument("--disable-dev-shm-usage")	# overcome limited resource problems
 	chrome_options.add_argument("--mute-audio")
 	
 	# Load extensions
@@ -44,28 +46,54 @@ def scraping(video_url):
 
 
 
-if __name__ == "__main__":
+def scraping_open(driver, url):
+	
+	# Open the video URL in the browser
+	try:
+		driver.get(url)
+		
+	except Exception:
+		print("\n* WebDriver internal error, please restart *")
+		driver.quit()
+		return None, None
+	
+	return driver
 
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-		s.bind(("localhost", 8080))
-		s.listen()
-		conn, addr = s.accept()
-		with conn:
-			data = conn.recv(1024)
-			if str(data.decode()) == "START":
-				if len(sys.argv) > 1:
-					web_driver, display = scraping(sys.argv[1])		# Initialize content demand
-					if web_driver is None and display is None:
-						sys.exit()
-				else:
-					print("FATAL INTERNAL ERROR: webdriver got no url.")
-					
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-		s.bind(("localhost", 8080))
-		s.listen()
-		conn, addr = s.accept()
-		with conn:
-			data = conn.recv(1024)
-			if str(data.decode()) == "STOP" and web_driver is not None and display is not None:
+
+
+if __name__ == "__main__":
+	
+	provider = (sys.argv[1]).lower()
+	url_list = import_url(provider)
+	url_n = 0
+	while True:
+		message = responder.recv_string()
+		print(f"\tBROWSER has received: {message}")
+		
+		if (message)=="START" and url_n == 0:
+			print(f"\n\tStep {url_n+1} of {len(url_list)} for {provider}")
+			url = url_list[url_n]
+			web_driver, display = scraping(url)
+			responder.send_string("DRIVER_READY")
+			
+			if web_driver is None or display is None:
+				sys.exit()
+				
+		if (message)=="START" and url_n > 0 and url_n <= len(url_list)-1:
+			print(f"\n\tStep {url_n+1} of {len(url_list)} for {provider}")
+			url = url_list[url_n]
+			web_driver = scraping_open(web_driver, url)
+			responder.send_string("DRIVER_READY")
+			
+			if web_driver is None:
+				sys.exit()
+				
+		if (message)=="STOP":
+			url_n += 1
+			if url_n > len(url_list)-1:
+				responder.send_string("DONE")
 				web_driver.quit()
 				display.stop()
+				break
+			else:
+				responder.send_string("CONTINUE")

@@ -1,7 +1,5 @@
 PyVirtualDisplay==3.0
+pyzmq==25.1.1
 Requests==2.31.0
-scapy==2.4.4
-selenium==4.14.0
+selenium==4.15.2
 tabulate==0.9.0
-geopy==2.3.0
-ripe.atlas.cousteau==2.0.0

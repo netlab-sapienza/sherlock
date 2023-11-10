@@ -1,30 +1,111 @@
 from tabulate import tabulate
 from datetime import datetime as d
+import requests
+import shutil
+import bz2
+import os
+import re
 import sys
 
-
-
-def check_input(link = "https://www.youtube.com/watch?v=XqZsoesa55w"):			#Babyshark link
-	
-	output = {}
-	if len(sys.argv) < 2:
-		output["url"] = link
-	else:
-		output["url"] = sys.argv[1]
+def update_caida(REQ_TIMEOUT):
+	try:
+		url = "https://publicdata.caida.org/datasets/as-relationships/serial-1/"
+		response = requests.get(url, timeout = REQ_TIMEOUT)
 		
-	if "youtube" in output["url"]:
+		if response.status_code == 200:
+			file_links = re.findall(r'<a href="([^"]*as-rel.txt.bz2)"', response.text)
+			dates = [re.search(r'(\d{8})\.as-rel.txt.bz2', link).group(1) for link in file_links]
+			latest_date = max(dates)
+			latest_file = f"{latest_date}.as-rel.txt.bz2"
+			
+			if os.path.exists(latest_file[:-4]):
+				# Latest file is already in the working directory
+				return latest_file[:-4]
+				
+			else:
+				latest_file_url = f"{url}/{latest_file}"
+				file_response = requests.get(latest_file_url, timeout=REQ_TIMEOUT)
+				
+				if file_response.status_code == 200:
+					with open(latest_file, "wb") as file:
+						file.write(file_response.content)
+						
+					# Succesfully downloaded latest_file, now extracting and saving
+					with bz2.BZ2File(latest_file, 'rb') as bz2_file:
+						content = bz2_file.read()
+					extracted_file = f"{latest_date}.as-rel.txt"
+					with open(extracted_file, "wb") as file:
+						file.write(content)
+						
+					# Changing from root-group to user-group
+					uid = os.getuid()
+					gid = os.getgid()
+					new_gid = 1000					# UserGroup
+					os.chown('./'+extracted_file, uid, new_gid)
+					os.chmod('./'+extracted_file, 0o664)		# Permissions: -rw-rw-r--
+					
+					# Removing the bz2 file
+					os.remove(latest_file)
+					
+					# Remove old files
+					for old_date in dates:
+						if old_date != latest_date:
+							old_file = f"{old_date}.as-rel.txt.bz2"
+							old_extracted_file = f"{old_date}.as-rel.txt"
+							
+							if os.path.exists(old_file):
+								os.remove(old_file)
+							
+							if os.path.exists(old_extracted_file):
+								os.remove(old_extracted_file)
+								
+					return extracted_file
+					
+				else:
+					print(f"Error in CAIDA file download. Status code: {file_response.status_code}")
+					return None
+				
+		else:
+			print(f"Error CAIDA in file download. Status code: {response.status_code}")
+			return None
+			
+	except Exception as e:
+		print(f"Error in updating CAIDA database, error: {e}")
+		return None
+
+def import_url(provider = "youtube"):
+	l = []
+	with open(f'./contents/{provider}.txt', 'r') as file:
+		for line in file:
+			l.append(line.strip())
+	file.close()
+	return l
+
+def check_input(provider):
+
+	output = {}
+	output["provider"] = provider
+	
+	if output["provider"] == "youtube":
 		output["cname"] = "googlevideo"
-	elif "netflix" in output["url"]:
-		output["cname"] = "nflxvideo"
-	elif "twitch" in output["url"]:
-		output["cname"] = "ttvnw.net"
+	elif output["provider"] == "twitch":
+		output["cname"] = "cloudfront"
+	elif output["provider"] == "bbc":
+		output["cname"] = "fastly+akamai"
+	elif output["provider"] == "twitter":
+		output["cname"] = "edgecastcdn"
+	elif output["provider"] == "tiktok":
+		output["cname"] = "akamai"
+	elif output["provider"] == "facebook":
+		output["cname"] = "fbcdn"
+	elif output["provider"] == "instagram":
+		output["cname"] = "cdninstagram"
 	else:
-		print("URL not valid or supported")
+		print("Provider not valid or supported")
 		return None
 	
-	print("Running the script with these inputs:")
-	print(tabulate([list(output.keys()), list(output.values())]))
-	print(" ")
+	output["url"] = import_url(output["provider"])
+	
 	return output
 
 
@@ -49,46 +130,30 @@ def is_public(ip):
 
 
 
-def find_addr_max_data(ip_count):
-	# This function shows and returns the address that sent the most data
-	# INPUT: type "dict", 
-	#	"key" is an IP address and "value" the number of bytes it sent
-	# OUTPUT: type "str", the address that sent the most data
-	
-	max_k = None
-	max_n = 0
-	for key, n in ip_count.items():
-		if is_public(key):
-			if n > max_n:
-				max_n = n
-				max_k = key
-	print(f"\n\nPublic address that sent the most data: {max_k}")
-	return max_k
-
-
-
 def show_table(table_data, headers, style, table_name, save=False):
 	# This function prints on terminal a formatted table
 	# INPUTS: [table data, type: list], [headers, type: list], [style, type: "str"], [table_name, type: "str"], [save, type: str]
 	# 	some interesting table styles: "pretty", "grid", "latex"
 	
-	print(f"\nShowing {table_name}...")
+	#print(f"\nShowing {table_name}...")
 	table = tabulate(table_data, headers=headers, tablefmt=style)
-	print(table)
+	#print(table)
 	if save:
 		moment = str(d.now().year)+str(d.now().month)+str(d.now().day)+"_"+str(d.now().hour)+str(d.now().minute)+str(d.now().second)
 		with open('./output/table_'+table_name+'_'+moment+'.txt', 'w') as f:
 			f.write(table)
+	return table
 
 		
 
-def check_server(ip, check_str, dns_values):
+def check_server(ip, check_list, dns_values):
 	for v in dns_values:
 		for entry in (v.values()):				# Inspect DNS record
 			if isinstance(entry, list) and ip in entry:
 				for el in entry:			# For each element of the DNS record
-					if isinstance(el, bytes) and check_str in el.decode("utf-8"):
-						return True
+					for check_str in check_list.split("+"):
+						if isinstance(el, bytes) and check_str in el.decode("utf-8"):
+							return True
 			
 	return False
 
@@ -132,6 +197,11 @@ def dns_data_table_format(dns_data):
 
 
 		
+def get_time():
+	return d.now().strftime("%H:%M:%S %A %d-%m-%Y")
+	
+	
+	
 if __name__ == "__main__":	#For testing...
 	# Destination IP address
 	destination_ip = "8.8.8.8"

@@ -1,6 +1,49 @@
 import requests
 import json
-from functions import is_public
+from functions import is_public, update_caida
+from scapy.all import IP, ICMP, sr1
+
+
+
+def ping_as(as_number, REQ_TIMEOUT):
+	# Step 1: Connect to the BGPView API
+	api_url = f'https://api.bgpview.io/asn/{as_number}/prefixes'
+	headers = {"User-Agent": "testing uniroma1.com - email@example.com"}
+	try:
+		response = requests.get(api_url, headers=headers, timeout=REQ_TIMEOUT)
+
+		# Step 2: Extract all IPv4 prefixes
+		data = response.json()
+
+		# Step 3: Ping .1 of one prefix using Scapy
+		prefix = data['data']['ipv4_prefixes'][0]['ip']
+		ip_address = prefix[:-1]+"1"
+		try:
+			packet = IP(dst=ip_address) / ICMP()
+			response = sr1(packet, timeout=1, verbose=False)
+			if response:
+				return True
+		except Exception as e:
+			print(f"Error pinging {ip_address} using Scapy: {e}")
+			return False
+				
+	except requests.exceptions.Timeout:
+		return False
+
+
+
+def get_as_home(REQ_TIMEOUT):
+	try:
+		response = requests.get("https://api.ipify.org?format=json")
+		data = response.json()
+		AS, _ = find_as(data["ip"], REQ_TIMEOUT)
+		return AS
+		
+	except Exception as e:
+		print("Public IP address of host not found")
+		return "*"
+
+
 
 def find_location(ip_addr, REQ_TIMEOUT):
 	if is_public(ip_addr):
@@ -30,33 +73,6 @@ def find_location(ip_addr, REQ_TIMEOUT):
 
 
 
-def find_neighbours(asn, REQ_TIMEOUT):
-	url = "https://stat.ripe.net/data/asn-neighbours/data.json"
-	params = {"data_overload_limit": "ignore", "resource": str(asn)}
-	try:
-		response = requests.get(url, params=params, timeout=REQ_TIMEOUT)
-		
-		if response.status_code == 200:
-			r = json.loads(response.content.decode("utf-8"))
-			neighbours = []
-			if len(r["data"]["neighbours"]) > 1:
-				for el in r["data"]["neighbours"]:
-					neighbours.append(el["asn"])
-			elif len(r["data"]["neighbours"]) < 1:
-				print("WARNING: found no asn, returning None")
-				return None
-			if r["data"]["neighbours"][0]:
-				neighbours.append(r["data"]["neighbours"][0]["asn"])
-				return neighbours
-		else:
-			print("Failed GET request. Status code: ", response.status_code)
-			return None
-	except requests.exceptions.Timeout:
-		print("Request timeout.")
-		return None
-
-
-
 def find_as(ip_addr, REQ_TIMEOUT):
 	if is_public(ip_addr):
 		url = "https://stat.ripe.net/data/prefix-overview/data.json"
@@ -70,69 +86,130 @@ def find_as(ip_addr, REQ_TIMEOUT):
 					print("WARNING: found more than one asn, returning the first")
 				elif len(r["data"]["asns"]) < 1:
 					print("WARNING: found no asn, returning None")
-					return None, " --- "
+					return None, ""
 				if r["data"]["asns"][0]:
 					asn = r["data"]["asns"][0]["asn"]
 					holder = r["data"]["asns"][0]["holder"]
 					return asn, holder
 			else:
 				print("Failed GET request. Status code: ", response.status_code)
-				return None, " --- "
+				return None, ""
 				
 		except requests.exceptions.Timeout:
-			print("Request timeout.")
-			return None, " --- "
+			print("AS Request timeout.")
+			return None, ""
 	else:
-		return None, " --- "
+		return None, ""
 
-
-
-def check_neighbour(path, REQ_TIMEOUT):
-	as_path = {}
-	as_list = []
+def check_neighbour(as_path, REQ_TIMEOUT):
 	
-	for idx, el in enumerate(path):
-		if isinstance(el, int):
-			as_path[idx] = el
+	ASP = []
+	caida_db = update_caida(REQ_TIMEOUT)
+	
+	for index, asn in enumerate(as_path):
+		if isinstance(asn, int):
+			ASP.append(asn)
+			
+	known_asns = [ASP[i] for i in range(len(ASP)) if i == 0 or ASP[i] != ASP[i - 1]]
+	
+	as_list = []
+	for i in range(len(known_asns) - 1):
+		print(f"\t\tAS path step {i+1}/{len(known_asns)-1}")
+		asn1 = known_asns[i]
+		asn2 = known_asns[i + 1]
 		
-	keys = list(as_path.keys())
-	if keys:
-		[as_list.append('*') for x in range(keys[0])]
-		
-		for i in range(len(keys) - 1):
-			asn = as_path[keys[i]]
-			next_asn = as_path[keys[i+1]]
-			print(f"\n*** AS {asn} -> {next_asn}:")
-			
-			neighbours = find_neighbours(asn, REQ_TIMEOUT)
-			num_unknown_hops = keys[i+1]-keys[i]-1
-			
-			as_list.append(asn)
-			
-			if neighbours is not None:
-				[as_list.append('*') for x in range(num_unknown_hops)]
-				if next_asn == asn:
-					print(f"\tSAME: {num_unknown_hops} unknown hops between them")
-				elif next_asn in neighbours:
-					print(f"\tCONNECTED: {num_unknown_hops} unknown hops between them")
-				else:
-					print(f"\tNOT CONNECTED: {num_unknown_hops} unknown hops between them")
-					as_list.append("?")
-			else:
-				print("\tERROR: could not complete the request.")
-				print(f"\t       {num_unknown_hops} unknown hops between them")
-				[as_list.append('!') for x in range(max(1, num_unknown_hops))]
-				
-		as_list.append(as_path[keys[i+1]])		
-	return(as_list)
+		flag, neighbours = intersect_neighbours(asn1, asn2, caida_db, REQ_TIMEOUT)
+		if flag:
+			as_list.append(asn1)
+		else:
+			as_list.append(asn1)
+			as_list.append(neighbours)
+	
+	as_list.append(known_asns[-1])
+	
+	return as_list
+	
+def intersect_neighbours(as1, as2, caida_db, REQ_TIMEOUT):
+	transit_neighbours_1 = set()
+	peering_neighbours_1 = set()
+	transit_neighbours_2 = set()
+	peering_neighbours_2 = set()
+	
+	if caida_db is None:
+		caida_db = "./20231101.as-rel.txt"
 
+	with open("./"+caida_db, "r") as f:
+		for line in f:
+			if not line.startswith('#'):
+				parts = line.strip().split('|')
+				a1 = int(parts[0])
+				a2 = int(parts[1])
+				rel = int(parts[2])
+				
+				if (a1 == as1):
+					if rel == 0:
+						peering_neighbours_1.add(a2)
+					elif rel == -1:
+						transit_neighbours_1.add(a2)
+				elif (a2 == as1):
+					if rel == 0:
+						peering_neighbours_1.add(a1)
+					elif rel == -1:
+						transit_neighbours_1.add(a1)
+				if (a2 == as2):
+					if rel == 0:
+						peering_neighbours_2.add(a1)
+					elif rel == -1:
+						transit_neighbours_2.add(a1)
+				elif (a1 == as2):
+					if rel == 0:
+						peering_neighbours_2.add(a2)
+					elif rel == -1:
+						transit_neighbours_2.add(a2)
+				
+	output = {}
+	neighbours = False
+	output["Transit"] = []
+	
+	if as2 in transit_neighbours_1 or as2 in peering_neighbours_1 or as1 in transit_neighbours_2 or as1 in peering_neighbours_2:
+		neighbours = True
+	else:
+		inter = list(transit_neighbours_1.intersection(transit_neighbours_2))
+		if len(inter)>0:
+			idx = 0
+			for AS in inter:
+				idx += 1
+				if idx < 11 and ping_as(AS, REQ_TIMEOUT):
+					output["Transit"].append([AS, 'available'])
+				elif idx < 11:
+					output["Transit"].append([AS, 'unreachable'])
+				else:
+					output["Transit"].append([AS, 'unknown'])
+		else:
+			peer_inter = list(peering_neighbours_1.intersection(peering_neighbours_2))
+			if len(peer_inter)>0:
+				output["Peering"] = peer_inter
+			else:
+				output = "?"
+			
+		if len(transit_neighbours_1) == 1:
+			if ping_as(list(transit_neighbours_1)[0], REQ_TIMEOUT):
+				output["Transit"] = [list(transit_neighbours_1)[0], 'available']
+			else:
+				output["Transit"] = [list(transit_neighbours_1)[0], 'unreachable']
+			f, n = intersect_neighbours(list(transit_neighbours_1)[0], as2, caida_db, REQ_TIMEOUT)
+			if not f:
+				output["Transit"].append(n)
+
+	return neighbours, output
 
 
 if __name__ == "__main__":
 	#ip = "151.99.51.173"
 	#asn, holder = find_as(ip)
 	#loc = find_location(ip)
-	as_path = ['*', '*', '*', 3269, 6762, '*', '*', 15169, '*', 15169, 12345]
+	as_path = [3269, '*', '*', '*', '*', 6762, '*', '*', 16625, '*', 15169, 12345]
+	#as_path = [16232, 3269, 20940]
 	as_list = check_neighbour(as_path, 5)
 	print("INPUT : "+str(as_path))
 	print("OUTPUT: "+str(as_list))
