@@ -137,7 +137,8 @@ tar -cvf {any_name}.tar ./output
 deactivate
 ```
 
-
+## Troubleshooting
+### Sudoers
 In case of "{user} is not in the sudoers file" error:
 ```
 cd
@@ -148,6 +149,7 @@ And, in the "# User privilege specification", add after root line:
 ```
 username	ALL=(ALL:ALL)	ALL
 ```
+### Path
 In case of "{path} is not in $PATH" warning:
 ```
 cd
@@ -159,6 +161,7 @@ Then add at the end of the file:
 export "/new_path:$PATH"
 ```
 And reboot
+
 ## License
 
 This project is under the terms of MIT license - see [LICENSE](LICENSE) for details.
