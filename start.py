@@ -3,14 +3,13 @@ from pprint import pprint
 import multiprocessing
 import subprocess
 import platform
-import time
 import sys
 import os
 
 
 
 def process1(cname, provider):
-	os.system(f"sudo python3 sniffer.py {cname} {provider}")
+	os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider}")
 	
 def process2(provider):
 	operating_system = str(platform.system()).lower()

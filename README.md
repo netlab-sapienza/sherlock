@@ -6,22 +6,23 @@ We will provide a Virtual Machine (all libraries are already included), but you 
 It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
 If no browser is already in your system, it is suggested to install Chromium for its size. 
 
-### How to install Chrome
-```
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-```
-### How to install Chromium
+### Browser installation
+#### Chromium
 ```
 sudo apt-get install chromium-browser 
 sudo apt-get install chromium-chromedriver
 ```
-### How to install Firefox
+#### Chrome
+```
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+```
+#### Firefox
 ```
 sudo snap install firefox
 ```
 
-### How to install VirtualDisplay
+### VirtualDisplay installation
 It is also required also X-server video frame buffer:
 ```
 sudo apt-get install xvfb
@@ -48,11 +49,18 @@ Proceed by cloning this repository and open the appropriate directory:
 git clone https://github.com/PaoloGit99/sherlock
 cd sherlock
 ```
+Create and activate a virtual environment called **myenv** in this directory, using `virtualenv`.
+To use the appropriate python version, check the one installed in the system with `python3 --version`, and replace "X":
+```
+sudo apt-get install -y python3-virtualenv
 
-To install all libraries, use the following commands (user & root):
+python3 --version
+virtualenv --python=3.X myenv
+source myenv/bin/activate
+```
+To install all libraries in `myenv`, use the following commands:
 ```
 pip install -r requirements.txt
-sudo pip install -r sudo_requirements.txt
 ```
 
 ## Usage
@@ -96,6 +104,61 @@ To observe the results properly formatted, run the following command:
 python3 table.py
 ```
 
+Lastly, to export the output folder in a compressed .tar archive use:
+```
+tar -cvf {any_name}.tar ./output
+```
+The virtual environment can be stopped deactivated with the command `deactivate`
+
+## All useful code
+```
+sudo apt-get install -y chromium-browser 
+sudo apt-get install -y chromium-chromedriver
+sudo apt-get install -y xvfb
+sudo apt-get install -y git
+sudo apt-get install -y python3-pip
+sudo apt-get install -y python3-virtualenv
+```
+```
+git clone https://github.com/PaoloGit99/sherlock
+cd sherlock
+```
+```
+python3 --version
+virtualenv --python=3.X
+source myenv/bin/activate
+pip install requirements.txt
+```
+```
+python3 start.py
+python3 start.py {provider_name}
+python3 table.py
+tar -cvf {any_name}.tar ./output
+deactivate
+```
+
+
+In case of "{user} is not in the sudoers file" error:
+```
+cd
+su root
+nano /etc/sudoers
+```
+And, in the "# User privilege specification", add after root line:
+```
+username	ALL=(ALL:ALL)	ALL
+```
+In case of "{path} is not in $PATH" warning:
+```
+cd
+su root
+nano ./.bashrc
+```
+Then add at the end of the file:
+```
+export "/new_path:$PATH"
+```
+And reboot
 ## License
 
 This project is under the terms of MIT license - see [LICENSE](LICENSE) for details.
