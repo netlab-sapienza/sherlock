@@ -125,9 +125,9 @@ cd sherlock
 ```
 ```
 python3 --version
-virtualenv --python=3.X
+virtualenv --python=3.X myenv
 source myenv/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 ```
 python3 start.py
