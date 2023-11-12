@@ -147,7 +147,7 @@ nano /etc/sudoers
 ```
 And, in the "# User privilege specification", add after root line:
 ```
-username	ALL=(ALL:ALL)	ALL
+{username}	ALL=(ALL:ALL)	ALL
 ```
 ### Path
 In case of "{path} is not in $PATH" warning:
