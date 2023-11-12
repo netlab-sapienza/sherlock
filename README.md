@@ -1,8 +1,8 @@
 # Sherlock
 This project revolves around the implementations of a scraping and sniffing mechanism: locating the position of any CDN's surrogate server(s).
-We will provide a Virtual Machine (all libraries are already included), but you can follow the Installation Section Guide to eventually install the software manually (on a Linux Operating System).
+We will provide a Virtual Machine (for users with x86-64/32 architecture, all libraries will be included), but you can follow the Installation Section Guide to eventually install the software manually (for users running on a different architecture, on a Linux Operating System).
 
-## Installation
+## Installation (Linux operating system has to be 20.x version or higher)
 It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
 If no browser is already in your system, it is suggested to install Chromium for its size. 
 
