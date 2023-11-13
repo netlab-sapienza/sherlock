@@ -1,4 +1,5 @@
-from functions import check_input
+from functions import check_input, get_default_interface
+from dns import *
 from pprint import pprint
 import multiprocessing
 import subprocess
@@ -8,8 +9,9 @@ import os
 
 
 
-def process1(cname, provider):
-	os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider}")
+def process1(cname, provider, dns):
+	os.system(f"sudo python3 sniffer.py {cname} {provider} {dns}")
+	#os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider} {dns}")
 	
 def process2(provider):
 	operating_system = str(platform.system()).lower()
@@ -29,28 +31,59 @@ def process2(provider):
 		print("ERROR: Please run in Linux environment")
 
 if __name__ == "__main__":
-
-	if len(sys.argv) < 2:
-		provider = ["youtube", "twitch", "bbc", "twitter", "tiktok", "facebook", "instagram"]
-		num_iterations = len(provider)
-	else:
-		provider = (sys.argv[1]).lower()
-		num_iterations = 1
 	
-	for i in range(num_iterations):
-		if num_iterations>1:
-			inputs = check_input(provider[i])
+	connectivity = check()
+	if connectivity:
+		print("Internet connection verified")
+		if len(sys.argv) < 2:
+			provider = ["youtube", "twitch", "bbc", "twitter", "tiktok", "facebook", "instagram"]
+			num_iterations = len(provider)
 		else:
-			inputs = check_input(provider)
-		print(f"Analyzing provider {i+1}/{num_iterations}:")
-		pprint(inputs)
-		print(" ")
+			provider = (sys.argv[1]).lower()
+			num_iterations = 1
 		
-		sniff_process = multiprocessing.Process(target=process1, args=(inputs["cname"], inputs["provider"],))
-		browser_process = multiprocessing.Process(target=process2, args=(inputs["provider"],))
+		#With default DNS
+		for i in range(num_iterations):
+			if num_iterations>1:
+				inputs = check_input(provider[i])
+			else:
+				inputs = check_input(provider)
+			print(f"STEP 1/2 (default DNS) Analyzing provider {i+1}/{num_iterations}:")
+			pprint(inputs)
+			print(" ")
+			
+			sniff_process = multiprocessing.Process(target=process1, args=(inputs["cname"], inputs["provider"], get_current_dns(),))
+			browser_process = multiprocessing.Process(target=process2, args=(inputs["provider"],))
+			
+			browser_process.start()
+			sniff_process.start()
+			
+			browser_process.join()
+			sniff_process.join()
 		
-		browser_process.start()
-		sniff_process.start()
+		DNS = change_dns()
+		if DNS is not None:
+			#With modified DNS
+			for i in range(num_iterations):
+				if num_iterations>1:
+					inputs = check_input(provider[i])
+				else:
+					inputs = check_input(provider)
+				print(f"STEP 2/2 (public DNS) Analyzing provider {i+1}/{num_iterations}:")
+				pprint(inputs)
+				print(" ")
+				
+				sniff_process = multiprocessing.Process(target=process1, args=(inputs["cname"], inputs["provider"], DNS))
+				browser_process = multiprocessing.Process(target=process2, args=(inputs["provider"],))
+				
+				browser_process.start()
+				sniff_process.start()
+				
+				browser_process.join()
+				sniff_process.join()
+		else:
+			print("No available public DNS server")
 		
-		browser_process.join()
-		sniff_process.join()
+	else:
+		print("Internet connection error!")
+	reset_network_manager()

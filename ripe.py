@@ -27,7 +27,7 @@ def ping_as(as_number, REQ_TIMEOUT):
 			print(f"Error pinging {ip_address} using Scapy: {e}")
 			return False
 				
-	except requests.exceptions.Timeout:
+	except Exception as e:
 		return False
 
 
@@ -208,10 +208,11 @@ if __name__ == "__main__":
 	#ip = "151.99.51.173"
 	#asn, holder = find_as(ip)
 	#loc = find_location(ip)
-	as_path = [3269, '*', '*', '*', '*', 6762, '*', '*', 16625, '*', 15169, 12345]
+	#as_path = [3269, '*', '*', '*', '*', 6762, '*', '*', 16625, '*', 15169, 12345]
 	#as_path = [16232, 3269, 20940]
-	as_list = check_neighbour(as_path, 5)
-	print("INPUT : "+str(as_path))
-	print("OUTPUT: "+str(as_list))
+	#as_list = check_neighbour(as_path, 5)
+	print(ping_as(16509, 5))
+	#print("INPUT : "+str(as_path))
+	#print("OUTPUT: "+str(as_list))
 	#neighbours = find_neighbours(asn)
 	#print(neighbours)

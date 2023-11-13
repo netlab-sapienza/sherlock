@@ -40,7 +40,7 @@ def scraping(video_url):
 		driver.get(video_url)
 		
 	except Exception:
-		print("\n* WebDriver internal error, please restart *")
+		print("\n* WebDriver error *")
 		driver.quit()
 		return None, None
 	
@@ -55,7 +55,7 @@ def scraping_open(driver, url):
 		driver.get(url)
 		
 	except Exception:
-		print("\n* WebDriver internal error, please restart *")
+		print("\n* WebDriver error *")
 		driver.quit()
 		return None, None
 	
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 		print(f"BROWSER has received: {message}")
 		
 		if (message)=="START" and url_n == 0:
-			print(f"\nStep {url_n+1} of {len(url_list)}")
+			print(f"\n\tRequesting url {url_n+1} of {len(url_list)} for {provider}")
 			url = url_list[url_n]
 			web_driver, display = scraping(url)
 			responder.send_string("DRIVER_READY")
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 				sys.exit()
 				
 		if (message)=="START" and url_n > 0 and url_n <= len(url_list)-1:
-			print(f"\nStep {url_n+1} of {len(url_list)}")
+			print(f"\n\tRequesting url {url_n+1} of {len(url_list)} for {provider}")
 			url = url_list[url_n]
 			web_driver = scraping_open(web_driver, url)
 			responder.send_string("DRIVER_READY")

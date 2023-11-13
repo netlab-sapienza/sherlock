@@ -1,7 +1,7 @@
 from datetime import datetime as d
 from functions import *
 from tr import *
-import scapy.all as scapy
+from scapy.all import sniff, IP, DNS
 import sys
 import time
 import zmq
@@ -22,10 +22,10 @@ def process_packet(packet, cname):
 	global SNIFFER_TIMEOUT
 	global last_update
 	
-	if scapy.IP in packet:						# Check if the packet contains IP layer
+	if IP in packet:						# Check if the packet contains IP layer
 		
-		if scapy.DNS in packet:				# Check if the packet contains DNS layer
-			dns_info = packet[scapy.DNS]			# and process it
+		if DNS in packet:				# Check if the packet contains DNS layer
+			dns_info = packet[DNS]			# and process it
 			if dns_info.qr == 0:  				#DNS query
 				dns_data[str(dns_info.id)] = {}
 				
@@ -52,11 +52,11 @@ def process_packet(packet, cname):
 					#if dns_info.ar is not None:	#Additional Record
 					#We don't use it
 		
-		src_ip = packet[scapy.IP].src				# Keep track of source IP addresses
+		src_ip = packet[IP].src				# Keep track of source IP addresses
 		if src_ip not in count.keys():
-			count[src_ip] = packet[scapy.IP].len
+			count[src_ip] = packet[IP].len
 		else:
-			count[src_ip] += packet[scapy.IP].len
+			count[src_ip] += packet[IP].len
 		
 		if check_server(src_ip, cname, dns_data.values()):
 			content_servers.add(src_ip)				
@@ -96,10 +96,12 @@ if __name__ == "__main__":
 
 	cname = sys.argv[1]
 	provider = sys.argv[2]
+	dns = sys.argv[3]
 	url = import_url(provider)
 	json_output = {}
 	for i in range(len(url)):
 		json_output[f"Content {i}"] = {}
+		json_output[f"Content {i}"]["DNS"] = dns
 		json_output[f"Content {i}"]["URL"] = url[i]
 		json_output[f"Content {i}"]["Content Provider"] = provider
 		json_output[f"Content {i}"]["CNAME"] = cname.split("+")
@@ -107,8 +109,8 @@ if __name__ == "__main__":
 	# Import global variables from "init.txt" files
 	import_variables()
 	
-	network_interface = scapy.conf.iface
-	print(f"\tSniffing on default interface: {network_interface}\n\tInterface IP address: {scapy.get_if_addr(network_interface)}\n")
+	network_interface, intf_addr = get_default_interface()
+	print(f"\tSniffing on default interface: {network_interface}\n\tInterface IP address: {intf_addr}\n")
 	
 	# Start the execution & save timestamp
 	requester.send_string("START")
@@ -118,7 +120,7 @@ if __name__ == "__main__":
 			json_output[key]["Timestamp"] = get_time()
 			break
 	
-	scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
+	sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
 	
 	while True:
 		msg = requester.recv_string()
@@ -171,14 +173,14 @@ if __name__ == "__main__":
 				if isinstance(value, dict) and value["URL"] == url[i]:
 					json_output[key]["Timestamp"] = get_time()
 					break
-			scapy.sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
+			sniff(iface=network_interface, store=False, stop_filter=lambda packet: process_packet(packet, cname))
 		
 		if msg=="DONE":
 			# The Web driver has now completed the list of content URLs.
 			break
 	
 	now = get_time()
-	filename = 'measure_'+provider+'_'+now+'.json'
+	filename = provider+' '+now+' '+dns+'.json'
 	with open('./output/'+filename, 'w') as f:
 		f.write(json.dumps(json_output, sort_keys=True, indent=4))
 		f.close()

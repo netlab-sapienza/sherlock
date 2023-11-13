@@ -1,11 +1,26 @@
 from tabulate import tabulate
 from datetime import datetime as d
+import subprocess
 import requests
 import shutil
 import bz2
 import os
 import re
 import sys
+
+def get_default_interface():
+	try:
+		# Esegui il comando e ottieni l'output
+		result = subprocess.run(['ip', '-o', '-4', 'route', 'show', 'to', 'default'], capture_output=True, text=True)
+
+		# Estrai il nome dell'interfaccia dalla riga dell'output
+		address = result.stdout.split()[2]
+		interface = result.stdout.split()[4]
+
+		return interface, address
+	except subprocess.CalledProcessError as e:
+		print(f"No interface found: {e}")
+		return None, None
 
 def update_caida(REQ_TIMEOUT):
 	try:
@@ -88,18 +103,25 @@ def check_input(provider):
 	
 	if output["provider"] == "youtube":
 		output["cname"] = "googlevideo"
+		
 	elif output["provider"] == "twitch":
 		output["cname"] = "cloudfront"
+		
 	elif output["provider"] == "bbc":
 		output["cname"] = "fastly+akamai"
+		
 	elif output["provider"] == "twitter":
 		output["cname"] = "edgecastcdn"
+		
 	elif output["provider"] == "tiktok":
 		output["cname"] = "akamai"
+		
 	elif output["provider"] == "facebook":
 		output["cname"] = "fbcdn"
+		
 	elif output["provider"] == "instagram":
 		output["cname"] = "cdninstagram"
+		
 	else:
 		print("Provider not valid or supported")
 		return None

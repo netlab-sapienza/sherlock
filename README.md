@@ -49,7 +49,7 @@ Proceed by cloning this repository and open the appropriate directory:
 git clone https://github.com/PaoloGit99/sherlock
 cd sherlock
 ```
-Create and activate a virtual environment called **myenv** in this directory, using `virtualenv`.
+Create and activate a virtual environment called `myenv` in this directory, using `virtualenv`.
 To use the appropriate python version, check the one installed in the system with `python3 --version`, and replace "X":
 ```
 sudo apt-get install -y python3-virtualenv
