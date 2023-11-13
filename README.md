@@ -161,6 +161,11 @@ Then add at the end of the file:
 export "/new_path:$PATH"
 ```
 And reboot
+### systemd-resolve command not found
+In this case:
+```
+sudo ln /usr/bin/resolvectl /usr/bin/systemd-resolve
+```
 
 ## License
 
