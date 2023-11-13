@@ -10,10 +10,8 @@ import sys
 
 def get_default_interface():
 	try:
-		# Esegui il comando e ottieni l'output
 		result = subprocess.run(['ip', '-o', '-4', 'route', 'show', 'to', 'default'], capture_output=True, text=True)
-
-		# Estrai il nome dell'interfaccia dalla riga dell'output
+		
 		address = result.stdout.split()[2]
 		interface = result.stdout.split()[4]
 
