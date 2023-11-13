@@ -10,8 +10,8 @@ import os
 
 
 def process1(cname, provider, dns):
-	os.system(f"sudo python3 sniffer.py {cname} {provider} {dns}")
-	#os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider} {dns}")
+	#os.system(f"sudo python3 sniffer.py {cname} {provider} {dns}")			#Use with system-wide installation
+	os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider} {dns}")	#Use with virtualenv installation
 	
 def process2(provider):
 	operating_system = str(platform.system()).lower()
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 				inputs = check_input(provider[i])
 			else:
 				inputs = check_input(provider)
-			print(f"STEP 1/2 (default DNS) Analyzing provider {i+1}/{num_iterations}:")
+			print(f"\nSTEP 1/2 (default DNS) Analyzing provider {i+1}/{num_iterations}:")
 			pprint(inputs)
 			print(" ")
 			
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 					inputs = check_input(provider[i])
 				else:
 					inputs = check_input(provider)
-				print(f"STEP 2/2 (public DNS) Analyzing provider {i+1}/{num_iterations}:")
+				print(f"\nSTEP 2/2 (public DNS) Analyzing provider {i+1}/{num_iterations}:")
 				pprint(inputs)
 				print(" ")
 				
