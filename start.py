@@ -1,4 +1,4 @@
-from functions import check_input, get_default_interface
+from functions import check_input, get_default_interface, get_time
 from dns import *
 from pprint import pprint
 import multiprocessing
