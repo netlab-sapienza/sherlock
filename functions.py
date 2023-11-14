@@ -218,7 +218,7 @@ def dns_data_table_format(dns_data):
 
 		
 def get_time():
-	return d.now().strftime("%H:%M:%S %A %d-%m-%Y")
+	return d.now().strftime("%H:%M:%S_%A_%d-%m-%Y")
 	
 	
 	
