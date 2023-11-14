@@ -86,4 +86,8 @@ if __name__ == "__main__":
 		
 	else:
 		print("Internet connection error!")
+	
+	output_name = f'results_{get_time()}'
+	tar_name = output_name.replace(" ", "_")
+	subprocess.run(f'tar -cvf {tar_name}.tar output', shell=True)
 	reset_network_manager()
