@@ -136,8 +136,10 @@ def intersect_neighbours(as1, as2, caida_db, REQ_TIMEOUT):
 	peering_neighbours_2 = set()
 	
 	if caida_db is None:
-		caida_db = "./20231101.as-rel.txt"
-
+		list_dir = os.listdir("./")
+		file_corr = fnmatch.filter(list_dir, '*' + "as-rel" + '*')
+		caida_db = os.path.join("./", file_corr[0])
+	
 	with open("./"+caida_db, "r") as f:
 		for line in f:
 			if not line.startswith('#'):
