@@ -2,11 +2,11 @@
 This project revolves around the implementations of a scraping and sniffing mechanism: locating the position of any CDN's surrogate server(s).
 We provide a Virtual Machine (Username: sherlock, Password: 1234) in [this Google Drive folder](https://drive.google.com/drive/folders/1p3BR-I83o8objP5-wufbsjkWfkNhdK1E) (for users with x86-64 architecture, all libraries will be included), but you can follow the Installation Section Guide to eventually install the software manually (for users running on a different architecture, on a Linux Operating System).
 
-If the VM starts correctly head to [usage section](#usage-2).
+If the VM starts correctly head to [usage section](#Usage).
 
-If you can't run the VM follow [this guide](#installation-1).
+If you can't run the VM follow [this guide](#Installation (Linux OS is suggested to be 20.x version or higher)).
 
-## Installation (Linux OS is suggested to be 20.x version or higher) {#installation-1}
+## Installation (Linux OS is suggested to be 20.x version or higher)
 It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
 If no browser is already in your system, it is suggested to install Chromium for its size. 
 
@@ -67,7 +67,7 @@ To install all libraries in `myenv`, use the following commands:
 pip install -r requirements.txt
 ```
 
-## Usage {#usage-2}
+## Usage
 To execute the program, run this instruction inside the directory of the project:
 ```
 python3 start.py
