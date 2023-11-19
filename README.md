@@ -1,8 +1,12 @@
 # Sherlock
 This project revolves around the implementations of a scraping and sniffing mechanism: locating the position of any CDN's surrogate server(s).
-We will provide a Virtual Machine (for users with x86-64/32 architecture, all libraries will be included), but you can follow the Installation Section Guide to eventually install the software manually (for users running on a different architecture, on a Linux Operating System).
+We provide a Virtual Machine (Username: sherlock, Password: 1234) in [this Google Drive folder](https://drive.google.com/drive/folders/1p3BR-I83o8objP5-wufbsjkWfkNhdK1E) (for users with x86-64 architecture, all libraries will be included), but you can follow the Installation Section Guide to eventually install the software manually (for users running on a different architecture, on a Linux Operating System).
 
-## Installation (Linux operating system has to be 20.x version or higher)
+If the VM starts correctly head to [usage section](#usage).
+
+If you can't run the VM follow [this guide](#installation).
+
+## Installation (Linux OS is suggested to be 20.x version or higher) {#installation}
 It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
 If no browser is already in your system, it is suggested to install Chromium for its size. 
 
@@ -63,7 +67,7 @@ To install all libraries in `myenv`, use the following commands:
 pip install -r requirements.txt
 ```
 
-## Usage
+## Usage {#usage}
 To execute the program, run this instruction inside the directory of the project:
 ```
 python3 start.py
@@ -83,10 +87,11 @@ Where provider_name is one of the following:
 * twitter
 * youtube
 
-The output will be saved inside the "output" directory, and it will be saved as follows:
+Each output will be saved inside the "output" directory, and it will be saved as follows:
 ```
 measure_{provider_name}_hh:mm:ss Weekday dd-mm-yyyy.json
 ```
+It will be automatically created a .tar archive in sherlock directory containing all results, you can share that archive with us.
 
 Some parameters can be tuned and are located in the `init.txt` file;
 * `SNIFFER_TIMEOUT`, set in seconds as the time to wait before interrupting the execution if packets are no longer received
@@ -94,21 +99,17 @@ Some parameters can be tuned and are located in the `init.txt` file;
 * `TH_BYTES`, set as the threshold of received bytes from a cache server to stop the execution 
 * `TRACEROUTE_MAXHOPS`, set as the maximum number of hops for tracerouting
 * `REQ_TIMEOUT`, set as the timeout for web API requests (geolocation, AS info, ...)
-* `SHOW_count_and_dns`, set as 'True' to terminal-print DNS and received traffic tables.
+* `SHOW_count_and_dns`, set as `True` to terminal-print DNS and received traffic tables.
 * `SAVE`, set as `True` to write tables of DNS and CountBytes in "./output"
 
 If none are set, default values will be used.
 
-To observe the results properly formatted, run the following command:
+(Optional) To observe the results properly formatted, run the following command:
 ```
 python3 table.py
 ```
 
-Lastly, to export the output folder in a compressed .tar archive use:
-```
-tar -cvf {any_name}.tar ./output
-```
-The virtual environment can be stopped deactivated with the command `deactivate`
+If you have executed the code in a virtual environment, you can interrupt it with the command `deactivate`.
 
 ## All useful code
 ```
@@ -133,7 +134,6 @@ pip install -r requirements.txt
 python3 start.py
 python3 start.py {provider_name}
 python3 table.py
-tar -cvf {any_name}.tar ./output
 deactivate
 ```
 
