@@ -4,7 +4,7 @@ We provide a Virtual Machine (Username: sherlock, Password: 1234) in [this Googl
 
 If the VM starts correctly head to [usage section](#usage).
 
-If you can't run the VM follow [this guide](#installation-(Linux-OS-is-suggested-to-be-20.x-version-or-higher)).
+If you can't run the VM follow [this guide](#installation-Linux-OS-is-suggested-to-be-20.x-version-or-higher).
 
 ## Installation (Linux OS is suggested to be 20.x version or higher)
 It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
