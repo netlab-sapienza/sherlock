@@ -13,6 +13,7 @@ If the VM on our drive isn't working for you:
 It is recommended, as compatibility, to install OS version 20.X or greater.
 We suggest installing the following operating system for ease of installation and use:
 
+* <a href="https://ubuntu.com/desktop" target="_blank">Ubuntu</a>
 * [Ubuntu](https://ubuntu.com/desktop){:target="_blank"}  
   Minimum requirements include:
     - 2 GHz dual core 64-bit processor;
