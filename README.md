@@ -4,13 +4,41 @@ We provide a Virtual Machine (Username: sherlock, Password: 1234) in [this Googl
 
 If the VM starts correctly head to [usage section](#usage).
 
-If you can't run the VM follow [this guide](#installation-linux-os-is-suggested-to-be-20x-version-or-higher).
+If you can't run the VM follow [this guide](#software-installation).
 
-## Installation (Linux OS is suggested to be 20.x version or higher)
-It is required to have an internet browser and virtual display installed on the current system (either Chrome, Chromium or Firefox).
-If no browser is already in your system, it is suggested to install Chromium for its size. 
+## Software installation
+If the VM on our drive isn't working for you:
+
+### Recommended Operating System
+It is recommended, as compatibility, to install OS version 20.X or greater.
+We suggest installing the following operating system for ease of installation and use:
+* [link to Ubuntu page](https://ubuntu.com/desktop))
+Minimum requirements include:
+- 2 GHz dual core 64-bit processor;
+- 4 GiB RAM (system memory)
+- 12 GB of hard-drive space;
+- 1024x768 screen resolution;
+
+If you prefer a lighter version to save space, consider:
+*[link to Xubuntu page](https://xubuntu.org/download/)
+Minimum requirements include:
+- 1.5 GHz dual core 64-bit processor;
+- 1 GiB RAM (system memory)
+- 10 GB of hard-drive space;
+
+This is the same operating system used in our provided VM, which size is 3.6GB.
+
+*Note:* You might encounter errors during the installation process, such as:
+
+- {user} is not in the sudoers file
+- {path} is not in $PATH
+- systemd-resolve command not found
+
+Refer to the [troubleshooting](#Troubleshooting) section to resolve these, following the steps we've taken.
 
 ### Browser installation
+It is required to have an internet browser installed on the current system (either Chrome, Chromium or Firefox).
+If no browser is already in your system, it is suggested to install Chromium for its size. 
 #### Chromium
 ```
 sudo apt-get install chromium-browser 
@@ -27,7 +55,7 @@ sudo snap install firefox
 ```
 
 ### VirtualDisplay installation
-It is also required also X-server video frame buffer:
+It is also required X-server video frame buffer:
 ```
 sudo apt-get install xvfb
 ```
