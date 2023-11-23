@@ -12,19 +12,21 @@ If the VM on our drive isn't working for you:
 ### Recommended Operating System
 It is recommended, as compatibility, to install OS version 20.X or greater.
 We suggest installing the following operating system for ease of installation and use:
+
 * [Ubuntu](https://ubuntu.com/desktop)
-  [] Minimum requirements include:
-  - 2 GHz dual core 64-bit processor;
-  - 4 GiB RAM (system memory)
-  - 12 GB of hard-drive space;
-  - 1024x768 screen resolution;
+  - Minimum requirements include:
+    - 2 GHz dual core 64-bit processor;
+    - 4 GiB RAM (system memory)
+    - 12 GB of hard-drive space;
+    - 1024x768 screen resolution;
 
 If you prefer a lighter version to save space, consider:
+
 *[Xubuntu](https://xubuntu.org/download/)
-  [] Minimum requirements include:
-  - 1.5 GHz dual core 64-bit processor;
-  - 1 GiB RAM (system memory)
-  - 10 GB of hard-drive space;
+  - Minimum requirements include:
+    - 1.5 GHz dual core 64-bit processor;
+    - 1 GiB RAM (system memory)
+    - 10 GB of hard-drive space;
 
 This is the same operating system used in our provided VM, which size is 3.6GB.
 
