@@ -14,7 +14,7 @@ It is recommended, as compatibility, to install OS version 20.X or greater.
 We suggest installing the following operating system for ease of installation and use:
 
 * [Ubuntu](https://ubuntu.com/desktop)
-  Minimum requirements include:
+  - Minimum requirements include:
     - 2 GHz dual core 64-bit processor;
     - 4 GiB RAM (system memory)
     - 12 GB of hard-drive space;
@@ -23,7 +23,7 @@ We suggest installing the following operating system for ease of installation an
 If you prefer a lighter version to save space, consider:
 
 * [Xubuntu](https://xubuntu.org/download/)
-  Minimum requirements include:
+  - Minimum requirements include:
     - 1.5 GHz dual core 64-bit processor;
     - 1 GiB RAM (system memory)
     - 10 GB of hard-drive space;
