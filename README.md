@@ -28,7 +28,7 @@ If you prefer a lighter version to save space, consider:
     - 1 GiB RAM (system memory)
     - 10 GB of hard-drive space;
 
-This is the same operating system used in our provided VM, which size is 3.6GB.
+This is the same operating system used in our provided VM.
 
 *Note:* You might encounter errors during the installation process, such as:
 
