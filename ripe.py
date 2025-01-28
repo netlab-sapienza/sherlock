@@ -1,5 +1,7 @@
 import requests
 import json
+import os
+import fnmatch
 from functions import is_public, update_caida
 from scapy.all import IP, ICMP, sr1
 
@@ -139,7 +141,7 @@ def intersect_neighbours(as1, as2, caida_db, REQ_TIMEOUT):
 		list_dir = os.listdir("./")
 		file_corr = fnmatch.filter(list_dir, '*' + "as-rel" + '*')
 		caida_db = os.path.join("./", file_corr[0])
-	
+
 	with open("./"+caida_db, "r") as f:
 		for line in f:
 			if not line.startswith('#'):
@@ -213,7 +215,7 @@ if __name__ == "__main__":
 	#as_path = [3269, '*', '*', '*', '*', 6762, '*', '*', 16625, '*', 15169, 12345]
 	#as_path = [16232, 3269, 20940]
 	#as_list = check_neighbour(as_path, 5)
-	print(ping_as(16509, 5))
+	print(intersect_neighbours(16232, 3269, None, 5))
 	#print("INPUT : "+str(as_path))
 	#print("OUTPUT: "+str(as_list))
 	#neighbours = find_neighbours(asn)

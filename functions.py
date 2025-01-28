@@ -16,6 +16,7 @@ def get_default_interface():
 		interface = result.stdout.split()[4]
 
 		return interface, address
+		
 	except subprocess.CalledProcessError as e:
 		print(f"No interface found: {e}")
 		return None, None

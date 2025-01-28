@@ -80,8 +80,7 @@ def traceroute(destination, max_hops=30, REQ_TIMEOUT=10):
 	return hop_dict, as_list
 	
 def extract_statistics(rtt):
-	if len(rtt) < 2:
-		# If len less than 2 division by zero for some operations
+	if len(rtt) == 0:
 		rtt = [1, 1]
 	mean_rtt = sum(rtt)/len(rtt)
 	variance_rtt = sum((x-mean_rtt)**2 for x in rtt)/(len(rtt)-1)

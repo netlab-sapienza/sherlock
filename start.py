@@ -7,11 +7,14 @@ import platform
 import sys
 import os
 
+print("*****")
+print("** THIS SCRIPT SHOULD BE RUN WITH SUDO")
+print("*****")
+print()
 
 
 def process1(cname, provider, dns):
-	#os.system(f"sudo python3 sniffer.py {cname} {provider} {dns}")			#Use with system-wide installation
-	os.system(f"sudo ./myenv/bin/python sniffer.py {cname} {provider} {dns}")	#Use with virtualenv installation
+	os.system(f"python3 sniffer.py {cname} {provider} {dns}")
 	
 def process2(provider):
 	operating_system = str(platform.system()).lower()
@@ -19,13 +22,9 @@ def process2(provider):
 	
 	if "linux" in operating_system:
 		if "chromium" in default_browser:
-			os.system(f"python3 browser_cm.py {provider}")
-		elif "chrome" in default_browser:
-			os.system(f"python3 browser_c.py {provider}")
-		elif "firefox" in default_browser:
-			os.system(f"python3 browser_f.py {provider}")
+			os.system(f"su -l sherlock -c \"cd /home/sherlock/Desktop/sherlock && python3 browser.py {provider}\"")
 		else:
-			print("ERROR: Please set Chromium, Chrome or Firefox as default browser")
+			print("ERROR: Please set Chromium as default browser")
 			
 	else:
 		print("ERROR: Please run in Linux environment")
@@ -48,7 +47,7 @@ if __name__ == "__main__":
 				inputs = check_input(provider[i])
 			else:
 				inputs = check_input(provider)
-			print(f"\nSTEP 1/2 (default DNS) Analyzing provider {i+1}/{num_iterations}:")
+			print(f"STEP 1/2 (default DNS) Analyzing provider {i+1}/{num_iterations}:")
 			pprint(inputs)
 			print(" ")
 			
@@ -69,7 +68,7 @@ if __name__ == "__main__":
 					inputs = check_input(provider[i])
 				else:
 					inputs = check_input(provider)
-				print(f"\nSTEP 2/2 (public DNS) Analyzing provider {i+1}/{num_iterations}:")
+				print(f"STEP 2/2 (public DNS) Analyzing provider {i+1}/{num_iterations}:")
 				pprint(inputs)
 				print(" ")
 				

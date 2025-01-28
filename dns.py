@@ -75,7 +75,7 @@ def extract_current_dns(string):
 
 
 if __name__ == "__main__":
-	
+	print(get_current_dns())
 	DNS = change_dns()
 	print(DNS)
 	print("---")
