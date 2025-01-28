@@ -1,0 +1,1317 @@
+{
+    "Content 0": {
+        "CNAME": [
+            "fastly",
+            "akamai"
+        ],
+        "Content Provider": "bbc",
+        "DNS": "8.8.8.8",
+        "Server 0": {
+            "ASN": " ",
+            "IP Address": "23.40.140.148",
+            "Location": " ",
+            "Packet Loss": {
+                "ICMP": 1.0,
+                "TCP": 0.0
+            },
+            "RTT Measurements": {
+                "ICMP": {
+                    "Experiments": [],
+                    "Metrics": {
+                        "Max": 1,
+                        "Mean": 1.0,
+                        "Median": 1.0,
+                        "Min": 1,
+                        "Norm2": "7.07e-01",
+                        "RMS": 1.0,
+                        "Std Dev": 0.0,
+                        "Variance": 0.0
+                    }
+                },
+                "TCP": {
+                    "Experiments": [
+                        20.336,
+                        28.377,
+                        7.049,
+                        5.352,
+                        4.493,
+                        8.004,
+                        6.512,
+                        108.429,
+                        11.002,
+                        6.177,
+                        79.221,
+                        6.484,
+                        6.222,
+                        21.374,
+                        50.09,
+                        12.491,
+                        5.193,
+                        8.556,
+                        5.48,
+                        9.311,
+                        8.108,
+                        7.985,
+                        7.712,
+                        5.316,
+                        13.131,
+                        15.941,
+                        4.802,
+                        5.534,
+                        6.45,
+                        10.754
+                    ],
+                    "Metrics": {
+                        "Max": 108.43,
+                        "Mean": 16.53,
+                        "Median": 7.99,
+                        "Min": 4.49,
+                        "Norm2": "6.47e-03",
+                        "RMS": 28.22,
+                        "Std Dev": 23.26,
+                        "Variance": 541.15
+                    }
+                }
+            },
+            "Traceroute": {
+                "As-Path": [
+                    12874
+                ],
+                "Hop-By-Hop": {
+                    "1": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.2.2",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "2": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "192.168.1.254",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "3": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.72.162",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "4": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.69.29",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "5": {
+                        "AS": null,
+                        "IP Address": "10.0.68.37",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "6": {
+                        "AS": null,
+                        "IP Address": "172.19.2.205",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "7": {
+                        "AS": null,
+                        "IP Address": "172.19.0.165",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "8": {
+                        "AS": null,
+                        "IP Address": "10.254.20.53",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "9": {
+                        "AS": 12874,
+                        "IP Address": "93.63.100.61",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "10": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.21",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "11": {
+                        "AS": 12874,
+                        "IP Address": "93.63.127.46",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "12": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "13": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "14": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "15": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "16": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "17": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "18": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "19": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "20": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "21": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "22": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "23": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "24": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "25": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "26": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "27": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "28": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "29": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "30": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    }
+                }
+            }
+        },
+        "Server 1": {
+            "ASN": " ",
+            "IP Address": "151.101.0.81",
+            "Location": " ",
+            "Packet Loss": {
+                "ICMP": 1.0,
+                "TCP": 0.0
+            },
+            "RTT Measurements": {
+                "ICMP": {
+                    "Experiments": [],
+                    "Metrics": {
+                        "Max": 1,
+                        "Mean": 1.0,
+                        "Median": 1.0,
+                        "Min": 1,
+                        "Norm2": "7.07e-01",
+                        "RMS": 1.0,
+                        "Std Dev": 0.0,
+                        "Variance": 0.0
+                    }
+                },
+                "TCP": {
+                    "Experiments": [
+                        9.114,
+                        9.648,
+                        20.65,
+                        23.587,
+                        6.147,
+                        4.882,
+                        11.177,
+                        21.598,
+                        7.651,
+                        7.252,
+                        6.387,
+                        12.308,
+                        14.152,
+                        16.888,
+                        43.214,
+                        10.411,
+                        12.189,
+                        6.602,
+                        5.188,
+                        11.343,
+                        19.078,
+                        5.291,
+                        11.902,
+                        5.988,
+                        6.172,
+                        30.171,
+                        17.03,
+                        15.211,
+                        15.856,
+                        11.446
+                    ],
+                    "Metrics": {
+                        "Max": 43.21,
+                        "Mean": 13.28,
+                        "Median": 11.39,
+                        "Min": 4.88,
+                        "Norm2": "1.17e-02",
+                        "RMS": 15.65,
+                        "Std Dev": 8.41,
+                        "Variance": 70.75
+                    }
+                }
+            },
+            "Traceroute": {
+                "As-Path": [
+                    12874
+                ],
+                "Hop-By-Hop": {
+                    "1": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.2.2",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "2": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "192.168.1.254",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "3": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.72.162",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "4": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.69.25",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "5": {
+                        "AS": null,
+                        "IP Address": "10.0.68.33",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "6": {
+                        "AS": null,
+                        "IP Address": "172.19.2.209",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "7": {
+                        "AS": null,
+                        "IP Address": "172.19.1.13",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "8": {
+                        "AS": null,
+                        "IP Address": "10.254.9.38",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "9": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.94",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "10": {
+                        "AS": 12874,
+                        "IP Address": "93.63.100.249",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "11": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "12": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "13": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "14": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "15": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "16": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "17": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "18": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "19": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "20": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "21": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "22": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "23": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "24": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "25": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "26": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "27": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "28": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "29": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "30": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    }
+                }
+            }
+        },
+        "Timestamp": "18.24.30 Monday 27-01-2025",
+        "URL": "https://www.bbc.com/news/av/world-67396773"
+    },
+    "Content 1": {
+        "CNAME": [
+            "fastly",
+            "akamai"
+        ],
+        "Content Provider": "bbc",
+        "DNS": "8.8.8.8",
+        "Server 0": {
+            "ASN": " ",
+            "IP Address": "23.32.220.150",
+            "Location": " ",
+            "Packet Loss": {
+                "ICMP": 1.0,
+                "TCP": 0.0
+            },
+            "RTT Measurements": {
+                "ICMP": {
+                    "Experiments": [],
+                    "Metrics": {
+                        "Max": 1,
+                        "Mean": 1.0,
+                        "Median": 1.0,
+                        "Min": 1,
+                        "Norm2": "7.07e-01",
+                        "RMS": 1.0,
+                        "Std Dev": 0.0,
+                        "Variance": 0.0
+                    }
+                },
+                "TCP": {
+                    "Experiments": [
+                        9.621,
+                        9.451,
+                        10.034,
+                        35.754,
+                        5.593,
+                        7.951,
+                        8.402,
+                        5.051,
+                        9.63,
+                        7.345,
+                        99.699,
+                        25.849,
+                        12.959,
+                        45.167,
+                        23.856,
+                        24.219,
+                        41.227,
+                        66.292,
+                        12.218,
+                        33.394,
+                        51.856,
+                        74.404,
+                        202.744,
+                        64.179,
+                        43.678,
+                        38.683,
+                        5.255,
+                        5.93,
+                        20.978,
+                        17.095
+                    ],
+                    "Metrics": {
+                        "Max": 202.74,
+                        "Mean": 33.95,
+                        "Median": 22.42,
+                        "Min": 5.05,
+                        "Norm2": "3.52e-03",
+                        "RMS": 51.92,
+                        "Std Dev": 39.96,
+                        "Variance": 1596.48
+                    }
+                }
+            },
+            "Traceroute": {
+                "As-Path": [
+                    12874
+                ],
+                "Hop-By-Hop": {
+                    "1": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.2.2",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "2": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "192.168.1.254",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "3": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.72.162",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "4": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.69.29",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "5": {
+                        "AS": null,
+                        "IP Address": "10.0.68.37",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "6": {
+                        "AS": null,
+                        "IP Address": "172.19.2.213",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "7": {
+                        "AS": null,
+                        "IP Address": "172.19.1.29",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "8": {
+                        "AS": null,
+                        "IP Address": "10.254.9.42",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "9": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.125",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "10": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.13",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "11": {
+                        "AS": null,
+                        "IP Address": "193.5.122.16",
+                        "Location": "IT, Italy, Milan, ",
+                        "Protocol": "UDP"
+                    },
+                    "12": {
+                        "AS": null,
+                        "IP Address": "193.5.72.129",
+                        "Location": "IT, Italy, Milan, ",
+                        "Protocol": "UDP"
+                    },
+                    "13": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "14": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "15": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "16": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "17": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "18": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "19": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "20": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "21": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "22": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "23": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "24": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "25": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "26": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "27": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "28": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "29": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "30": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    }
+                }
+            }
+        },
+        "Server 1": {
+            "ASN": " ",
+            "IP Address": "184.87.212.122",
+            "Location": " ",
+            "Packet Loss": {
+                "ICMP": 1.0,
+                "TCP": 0.0
+            },
+            "RTT Measurements": {
+                "ICMP": {
+                    "Experiments": [],
+                    "Metrics": {
+                        "Max": 1,
+                        "Mean": 1.0,
+                        "Median": 1.0,
+                        "Min": 1,
+                        "Norm2": "7.07e-01",
+                        "RMS": 1.0,
+                        "Std Dev": 0.0,
+                        "Variance": 0.0
+                    }
+                },
+                "TCP": {
+                    "Experiments": [
+                        30.348,
+                        23.372,
+                        24.137,
+                        4.76,
+                        20.303,
+                        48.891,
+                        6.687,
+                        6.112,
+                        10.687,
+                        30.45,
+                        4.858,
+                        12.676,
+                        13.039,
+                        21.381,
+                        11.136,
+                        32.788,
+                        9.798,
+                        5.435,
+                        14.343,
+                        23.297,
+                        10.896,
+                        5.406,
+                        9.23,
+                        5.436,
+                        29.001,
+                        71.987,
+                        4.985,
+                        17.856,
+                        17.261,
+                        4.873
+                    ],
+                    "Metrics": {
+                        "Max": 71.99,
+                        "Mean": 17.71,
+                        "Median": 12.86,
+                        "Min": 4.76,
+                        "Norm2": "7.95e-03",
+                        "RMS": 22.97,
+                        "Std Dev": 14.88,
+                        "Variance": 221.39
+                    }
+                }
+            },
+            "Traceroute": {
+                "As-Path": [
+                    12874
+                ],
+                "Hop-By-Hop": {
+                    "1": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.2.2",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "2": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "192.168.1.254",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "3": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.72.162",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "4": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.69.29",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "5": {
+                        "AS": null,
+                        "IP Address": "10.0.68.33",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "6": {
+                        "AS": null,
+                        "IP Address": "172.19.2.209",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "7": {
+                        "AS": null,
+                        "IP Address": "172.19.1.13",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "8": {
+                        "AS": null,
+                        "IP Address": "10.254.9.38",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "9": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.98",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "10": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.13",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "11": {
+                        "AS": null,
+                        "IP Address": "193.5.122.16",
+                        "Location": "IT, Italy, Milan, ",
+                        "Protocol": "UDP"
+                    },
+                    "12": {
+                        "AS": null,
+                        "IP Address": "193.5.72.129",
+                        "Location": "IT, Italy, Milan, ",
+                        "Protocol": "UDP"
+                    },
+                    "13": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "14": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "15": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "16": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "17": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "18": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "19": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "20": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "21": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "22": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "23": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "24": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "25": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "26": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "27": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "28": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "29": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "30": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    }
+                }
+            }
+        },
+        "Server 2": {
+            "ASN": " ",
+            "IP Address": "151.101.0.81",
+            "Location": " ",
+            "Packet Loss": {
+                "ICMP": 1.0,
+                "TCP": 0.0
+            },
+            "RTT Measurements": {
+                "ICMP": {
+                    "Experiments": [],
+                    "Metrics": {
+                        "Max": 1,
+                        "Mean": 1.0,
+                        "Median": 1.0,
+                        "Min": 1,
+                        "Norm2": "7.07e-01",
+                        "RMS": 1.0,
+                        "Std Dev": 0.0,
+                        "Variance": 0.0
+                    }
+                },
+                "TCP": {
+                    "Experiments": [
+                        7.717,
+                        13.128,
+                        27.033,
+                        16.171,
+                        8.069,
+                        7.217,
+                        5.759,
+                        10.797,
+                        18.615,
+                        5.908,
+                        18.354,
+                        4.762,
+                        15.727,
+                        4.39,
+                        5.003,
+                        12.888,
+                        4.934,
+                        9.809,
+                        9.601,
+                        55.537,
+                        12.66,
+                        5.784,
+                        14.939,
+                        6.41,
+                        4.209,
+                        14.476,
+                        7.24,
+                        4.986,
+                        6.029,
+                        11.78
+                    ],
+                    "Metrics": {
+                        "Max": 55.54,
+                        "Mean": 11.66,
+                        "Median": 8.84,
+                        "Min": 4.21,
+                        "Norm2": "1.20e-02",
+                        "RMS": 15.19,
+                        "Std Dev": 9.9,
+                        "Variance": 98.03
+                    }
+                }
+            },
+            "Traceroute": {
+                "As-Path": [
+                    12874
+                ],
+                "Hop-By-Hop": {
+                    "1": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.2.2",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "2": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "192.168.1.254",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "3": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.72.162",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "4": {
+                        "AS": null,
+                        "Holder": "",
+                        "IP Address": "10.0.69.25",
+                        "Location": "Private address",
+                        "Protocol": "ICMP"
+                    },
+                    "5": {
+                        "AS": null,
+                        "IP Address": "10.0.68.33",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "6": {
+                        "AS": null,
+                        "IP Address": "172.19.2.209",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "7": {
+                        "AS": null,
+                        "IP Address": "172.19.1.13",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "8": {
+                        "AS": null,
+                        "IP Address": "10.254.9.38",
+                        "Location": "Private address, ",
+                        "Protocol": "UDP"
+                    },
+                    "9": {
+                        "AS": 12874,
+                        "IP Address": "62.101.124.94",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "10": {
+                        "AS": 12874,
+                        "IP Address": "93.63.100.249",
+                        "Location": "IT, Italy, Milan, FASTWEB - Fastweb SpA",
+                        "Protocol": "UDP"
+                    },
+                    "11": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "12": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "13": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "14": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "15": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "16": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "17": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "18": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "19": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "20": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "21": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "22": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "23": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "24": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "25": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "26": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "27": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "28": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "29": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    },
+                    "30": {
+                        "AS": " ",
+                        "IP Address": " ",
+                        "Location": " ",
+                        "Protocol": "*"
+                    }
+                }
+            }
+        },
+        "Timestamp": "18.30.51 Monday 27-01-2025",
+        "URL": "https://www.bbc.com/news/av/world-europe-67399095"
+    }
+}

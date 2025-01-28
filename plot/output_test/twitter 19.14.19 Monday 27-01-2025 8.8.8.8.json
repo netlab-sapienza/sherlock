@@ -1,0 +1,20 @@
+{
+    "Content 0": {
+        "CNAME": [
+            "edgecastcdn"
+        ],
+        "Content Provider": "twitter",
+        "DNS": "8.8.8.8",
+        "Timestamp": "19.13.37 Monday 27-01-2025",
+        "URL": "https://twitter.com/i/status/1686941773824757761"
+    },
+    "Content 1": {
+        "CNAME": [
+            "edgecastcdn"
+        ],
+        "Content Provider": "twitter",
+        "DNS": "8.8.8.8",
+        "Timestamp": "19.13.57 Monday 27-01-2025",
+        "URL": "https://twitter.com/BBCPolitics/status/1723684125981159799"
+    }
+}
